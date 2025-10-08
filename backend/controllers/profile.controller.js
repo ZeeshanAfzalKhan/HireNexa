@@ -1,5 +1,4 @@
 import {User} from "../models/user.model.js";
-import bcrypt from "bcryptjs";
 import validator from "validator";
 
 export const updateProfile = async (req, res) => {
@@ -42,10 +41,10 @@ export const updateProfile = async (req, res) => {
 
 export const changePassword = async (req, res) => {
     try{
-        const {currentPassword, newPassword} = req.body.password;
+        const {currentPassword, newPassword} = req.body;
         const userId=req.id;
         const loggedInUser = await User.findById(userId);
-        const iscurrentPasswordCorrect = await bcrypt.compare(currentPassword, loggedInUser.password);
+        const iscurrentPasswordCorrect = loggedInUser.isPasswordCorrect(currentPassword);
 
         if(!iscurrentPasswordCorrect){
             return res.status(400).json({

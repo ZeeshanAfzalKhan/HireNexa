@@ -2,7 +2,9 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+
 import connectDB from "./utils/database.js";
+
 import userRoute from "./routes/auth.route.js";
 import profileRoute from "./routes/profile.route.js";
 import companyRoute from "./routes/company.route.js";
@@ -18,7 +20,7 @@ app.use(express.urlencoded({extended: true})); //this is a middleware that allow
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: "http://localhost:5173", // Only allow requests from this origin.
+    origin: "*", // Only allow requests from this origin.
     credentials: true // Allow sending cookies and authentication headers in cross-origin requests.
 }
 

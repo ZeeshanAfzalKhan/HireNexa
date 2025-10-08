@@ -1,12 +1,10 @@
 import {User} from "../models/user.model.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import validator from "validator";
 
 export const signup = async (req, res) => {
     try {
         const {firstName, lastName, phoneNumber, emailId, password, role} = req.body;
-        if(!firstName || !lastName){
+        if(!firstName){
             return res.status(400).json({
                 message: "Please enter your Name.",
                 success: false,
@@ -37,31 +35,53 @@ export const signup = async (req, res) => {
             })
         }
 
-        const user = await User.findOne({emailId});
-        if(user){
+        const existingUser = await User.findOne({emailId});
+        if(existingUser){
             return res.status(400).json({
                 message: "User already exists. Please login",
                 success: false,
             });
         };
 
-        const hashedpassword = await bcrypt.hash(password, 10);
-
-        await User.create({
+        const user = await User.create({
             firstName,
             lastName,
             phoneNumber,
             emailId,
-            password: hashedpassword,
+            password,
             role,
         });
 
-        return res.status(201).json({
+        const createdUser = await User.findById(user._id).select("-password");
+
+        if(!createdUser){
+            return res.status(400).json({
+                message: "Something went wrong while registering the user.",
+                success: false,
+            });
+        }
+
+        const options = {
+            httpsOnly: true,
+            secure: true
+        }
+
+        const token = createdUser.generateAuthToken();
+
+        return res
+        .status(201)
+        .cookie("token", token, options)
+        .json({
             message: "Account created successfully.",
             success: true,
+            user: createdUser
         });
     }
     catch(err) {
+        res.status(500).json({
+            message: "Internal Server Error",
+            success: false,
+        });
         console.log(err);
     }
 };
@@ -75,22 +95,12 @@ export const login = async(req, res) => {
                 success: false,
             });
         };
-
-        const user = await User.findOne({emailId});
-        if(!user){
+        if(!validator.isEmail(emailId)){
             return res.status(400).json({
-                message: "User not found. Please signup!",
+                message: "Invalid email.",
                 success: false,
-            });
-        };
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if(!isPasswordValid){
-            return res.status(400).json({
-                message: "Invalid Password.",
-                success: false,
-            });
-        };
+            })
+        }
 
         if(!["student", "recruitor"].includes(role)){
             return res.status(400).json({
@@ -99,6 +109,24 @@ export const login = async(req, res) => {
             })
         }
 
+        const user = await User.findOne({emailId});
+        if(!user){
+            return res.status(400).json({
+                message: "User not found. Please signup!",
+                success: false,
+            });
+        };
+        
+
+        const isPasswordValid = user.isPasswordCorrect(password);
+        if(!isPasswordValid){
+            return res.status(400).json({
+                message: "Invalid Password.",
+                success: false,
+            });
+        };
+
+
         if(role !== user.role){
             return res.status(400).json({
                 message: "Account doesn't exists with current role.",
@@ -106,19 +134,15 @@ export const login = async(req, res) => {
             });
         };
 
-        const tokenData = {
-            userId: user._id
+        const options = {
+            httpsOnly: true,
+            secure: true
         }
-        const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {expiresIn: '1d'});
+
+        const token = user.generateAuthToken();
 
         return res.status(200)
-                .cookie("token", token, {
-                    maxAge: 1*24*60*60*1000,
-                    httpsOnly:true, // This flag makes the cookie inaccessible to client-side JavaScript via document.cookie and prevents XSS attacks
-                    //The cookie can only be sent to the server via HTTP requests
-                    sameSite: 'strict' //due to this the cookie is sent only when the request comes from the same origin
-                    // it prevents Cross-Site Request Forgery (CSRF) attacks
-                })
+                .cookie("token", token, options)
                 .json({
                     message: `Welcome back ${user.firstName}`,
                     user,
@@ -127,6 +151,10 @@ export const login = async(req, res) => {
     }
 
     catch(err) {
+        res.status(500).json({
+            message: "Internal Server Error",
+            success: false,
+        });
         console.log(err);
     };
 };
@@ -137,9 +165,12 @@ export const logout = async (req, res) => {
             message: "Logged out successfully.",
             success: true,
         });
-        // The clearCookie("token") code is used to clear a cookie named "token" by setting a new cookie with the same name ("token") but with an expired date. The browser receives the expired cookie and removes it.
     }
     catch(err) {
+        res.status(500).json({
+            message: "Internal Server Error",
+            success: false,
+        });
         console.log(err);
     }
 }

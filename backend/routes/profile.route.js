@@ -2,9 +2,9 @@ import express from "express";
 import {updateProfile, changePassword} from "../controllers/profile.controller.js";
 import userAuth from "../middlewares/auth.js";
 
-const profileRoute = express.Router();
+const router = express.Router();
 
-profileRoute.route("/update").patch(userAuth, updateProfile);
-profileRoute.route("/changePassword").patch(userAuth, changePassword);
+router.patch("/update", userAuth, updateProfile);
+router.patch("/changePassword", userAuth, changePassword);
 
-export default profileRoute;
+export default router;
