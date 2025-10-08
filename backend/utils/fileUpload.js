@@ -2,6 +2,8 @@
 import multer from "multer";
 import streamifier from "streamifier";
 import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+dotenv.config({})
 
 // ✅ Configure Cloudinary
 cloudinary.config({
@@ -43,7 +45,7 @@ export const uploadToCloudinary = (file, folder = "uploads") => {
 
     const stream = cloudinary.uploader.upload_stream(
       {
-        folder,
+        folder: "HireNexa",
         resource_type: "auto", // detects pdf or image automatically
       },
       (error, result) => {

@@ -118,7 +118,7 @@ export const login = async(req, res) => {
         };
         
 
-        const isPasswordValid = user.isPasswordCorrect(password);
+        const isPasswordValid = await user.isPasswordCorrect(password);
         if(!isPasswordValid){
             return res.status(400).json({
                 message: "Invalid Password.",

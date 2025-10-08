@@ -35,17 +35,25 @@ const userSchema = new mongoose.Schema(
     profile: {
       bio: { type: String },
       skills: { type: [String] },
-      resumeOriginalName: { type: String },
-      resumeURL: { type: String },
+      resume: { 
+        resumeOriginalName: { type: String },
+        resumeURL: { type: String },
+        resumePublicId: { type: String }
+      },
       company: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
       },
-      profilePhoto: {
-        type: String,
-        default:
-          "https://www.inforwaves.com/media/2021/04/dummy-profile-pic-300x300-1.png",
+      profilePicture: {
+        profilePictureOriginalName: { type: String },
+        profilePictureURL: { type: String },
+        profilePicturePublicId: { type: String }
       },
+      socials: {
+        linkedIn: { type: String },
+        github: { type: String },
+        website: { type: String },
+      }
     },
   },
   { timestamps: true }
