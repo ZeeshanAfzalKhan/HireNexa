@@ -1,4 +1,4 @@
-import {User} from "../models/user.model.js";
+import User from "../models/user.model.js";
 import validator from "validator";
 
 export const signup = async (req, res) => {
@@ -9,6 +9,18 @@ export const signup = async (req, res) => {
                 message: "Please enter your Name.",
                 success: false,
             });
+        }
+        else if(!validator.isLength(firstName, {min: 3, max: 20})){
+            return res.status(400).json({
+                message: "Name must be between 3 and 20 characters.",
+                success: false,
+            })
+        }
+        else if( lastName && !validator.isLength(lastName, {min: 3, max: 20})){
+            return res.status(400).json({
+                message: "Name must be between 3 and 20 characters.",
+                success: false,
+            })
         }
         else if(!validator.isMobilePhone(phoneNumber, 'en-IN')){
             return res.status(400).json({
@@ -57,6 +69,7 @@ export const signup = async (req, res) => {
         if(!createdUser){
             return res.status(400).json({
                 message: "Something went wrong while registering the user.",
+                user: createdUser,
                 success: false,
             });
         }
@@ -95,6 +108,7 @@ export const login = async(req, res) => {
                 success: false,
             });
         };
+        
         if(!validator.isEmail(emailId)){
             return res.status(400).json({
                 message: "Invalid email.",
@@ -134,6 +148,8 @@ export const login = async(req, res) => {
             });
         };
 
+        const loggedInUser = await User.findById(user._id).select("-password")
+
         const options = {
             httpsOnly: true,
             secure: true
@@ -145,7 +161,7 @@ export const login = async(req, res) => {
                 .cookie("token", token, options)
                 .json({
                     message: `Welcome back ${user.firstName}`,
-                    user,
+                    user: loggedInUser,
                     success: true,
                 });
     }
@@ -155,7 +171,7 @@ export const login = async(req, res) => {
             message: "Internal Server Error",
             success: false,
         });
-        console.log(err);
+        console.log(err.message);
     };
 };
 

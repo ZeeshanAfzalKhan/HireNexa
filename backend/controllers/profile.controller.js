@@ -1,8 +1,11 @@
-import { User } from "../models/user.model.js";
+import User from "../models/user.model.js";
 import updateNestedFields from "../utils/updateNestedFields.js";
-import { uploadToCloudinary, deleteFromCloudinary } from "../utils/fileUpload.js";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} from "../utils/fileUpload.js";
 import validator from "validator";
-
+import containsRestrictedField from "../utils/containsRestrictedFields.js";
 export const getProfile = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -50,8 +53,9 @@ export const changePassword = async (req, res) => {
       });
     }
 
-    const iscurrentPasswordCorrect =
-      await loggedInUser.isPasswordCorrect(currentPassword);
+    const iscurrentPasswordCorrect = await loggedInUser.isPasswordCorrect(
+      currentPassword
+    );
 
     if (!iscurrentPasswordCorrect) {
       return res.status(400).json({
@@ -75,9 +79,8 @@ export const changePassword = async (req, res) => {
       message: "Password updated successfully",
       success: true,
     });
-  } 
-  catch (err) {
-    res.status(500).json({
+  } catch (err) {
+    return res.status(500).json({
       message: "Something went wrong",
       success: false,
     });
@@ -88,11 +91,89 @@ export const changePassword = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user._id;
-    const updates = req.body; 
+    const updates = req.body;
+
+    const restrictedFields = [
+      "emailId",
+      "password",
+      "role",
+      "profilePicture",
+      "resume",
+    ];
+
+    if (containsRestrictedField(req.body, restrictedFields)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "You are not allowed to update email, password, or file URLs directly",
+      });
+    } else if (
+      updates.firstName &&
+      !validator.isLength(updates.firstName, { min: 3, max: 20 })
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "First name must be between 3 and 20 characters",
+      });
+    } else if (
+      updates.lastName &&
+      !validator.isLength(updates.lastName, { min: 3, max: 20 })
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Last name must be between 3 and 20 characters",
+      });
+    } else if (
+      updates.profile.bio &&
+      !validator.isLength(updates.profile.bio, { min: 20, max: 200 })
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Bio must be between 0 and 200 characters",
+      });
+    } else if (
+      updates.phoneNumber &&
+      !validator.isMobilePhone(updates.phoneNumber, "en-IN")
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid contact number",
+      });
+    } else if (updates.profile.skills) {
+      const skills = updates.profile.skills;
+      console.log(skills);
+      if (!Array.isArray(skills)) {
+        return res.status(400).json({
+          message: "Skills must be an array.",
+          success: false,
+        });
+      }
+
+      if (skills.length > 15) {
+        return res.status(400).json({
+          message: "You can specify a maximum of 15 skills.",
+          success: false,
+        });
+      }
+
+      for (const skill of skills) {
+        if (
+          typeof skill !== "string" ||
+          !validator.isLength(skill.trim(), { min: 3, max: 30 })
+        ) {
+          return res.status(400).json({
+            message: "Each skill must be between 3 and 30 characters long.",
+            success: false,
+          });
+        }
+      }
+    }
 
     const user = await User.findById(userId).select("-password");
     if (!user)
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
 
     updateNestedFields(user, updates);
 
@@ -109,7 +190,7 @@ export const updateProfile = async (req, res) => {
       .status(500)
       .json({ success: false, message: "Something went wrong" });
   }
-}; 
+};
 
 export const updateProfilePicture = async (req, res) => {
   try {
@@ -117,29 +198,32 @@ export const updateProfilePicture = async (req, res) => {
     const profilePicture = req.file;
 
     if (!profilePicture) {
-        res.status(400).json({
-            success: false,
-            message: "Profile picture is required",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Profile picture is required",
+      });
     }
     const user = await User.findById(userId).select("-password");
 
     const response = await uploadToCloudinary(profilePicture);
 
-    if(!response.url) {
-        res.status(400).json({
-            success: false,
-            message: "Something went wrong while uploading profile picture",
-        })
+    if (!response.success) {
+      return res.status(400).json({
+        success: false,
+        message: "Something went wrong while uploading profile picture",
+      });
     }
 
-    if(user.profile.profilePicture.profilePicturePublicId) {
-        await deleteFromCloudinary(user.profile.profilePicture.profilePicturePublicId);
+    if (user.profile.profilePicture.profilePicturePublicId) {
+      await deleteFromCloudinary(
+        user.profile.profilePicture.profilePicturePublicId
+      );
     }
 
     user.profile.profilePicture.profilePictureURL = response.url;
     user.profile.profilePicture.profilePicturePublicId = response.public_id;
-    user.profile.profilePicture.profilePictureOriginalName = profilePicture.originalname;
+    user.profile.profilePicture.profilePictureOriginalName =
+      profilePicture.originalname;
 
     await user.save();
 
@@ -162,14 +246,23 @@ export const deleteProfilePicture = async (req, res) => {
 
     const user = await User.findById(userId).select("-password");
 
-    if(!user.profile.profilePicture.profilePicturePublicId) {
-        res.status(400).json({
-            success: false,
-            message: "Profile picture not found",
-        });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
-    await deleteFromCloudinary(user.profile.profilePicture.profilePicturePublicId);
+    if (!user?.profile?.profilePicture?.profilePicturePublicId?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Profile picture not found",
+      });
+    }
+
+    await deleteFromCloudinary(
+      user.profile.profilePicture.profilePicturePublicId
+    );
 
     user.profile.profilePicture.profilePictureURL = "";
     user.profile.profilePicture.profilePicturePublicId = "";
@@ -196,24 +289,24 @@ export const updateResume = async (req, res) => {
     const resume = req.file;
 
     if (!resume) {
-        res.status(400).json({
-            success: false,
-            message: "Resume is required",
-        });
+      res.status(400).json({
+        success: false,
+        message: "Resume is required",
+      });
     }
     const user = await User.findById(userId).select("-password");
 
     const response = await uploadToCloudinary(resume);
 
-    if(!response.url) {
-        res.status(400).json({
-            success: false,
-            message: "Something went wrong while uploading resume",
-        })
+    if (!response.success) {
+      res.status(400).json({
+        success: false,
+        message: "Something went wrong while uploading resume",
+      });
     }
 
-    if(user.profile.resume.resumePublicId) {
-        await deleteFromCloudinary(user.profile.resume.resumePublicId);
+    if (user.profile.resume.resumePublicId) {
+      await deleteFromCloudinary(user.profile.resume.resumePublicId);
     }
 
     user.profile.resume.resumeURL = response.url;
@@ -241,11 +334,11 @@ export const deleteResume = async (req, res) => {
 
     const user = await User.findById(userId).select("-password");
 
-    if(!user.profile.resume.resumePublicId) {
-        res.status(400).json({
-            success: false,
-            message: "Resume not found",
-        });
+    if (!user.profile.resume.resumePublicId) {
+      res.status(400).json({
+        success: false,
+        message: "Resume not found",
+      });
     }
 
     await deleteFromCloudinary(user.profile.resume.resumePublicId);
@@ -268,4 +361,3 @@ export const deleteResume = async (req, res) => {
       .json({ success: false, message: "Something went wrong" });
   }
 };
-
