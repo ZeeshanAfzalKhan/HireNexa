@@ -27,11 +27,11 @@ const corsOptions = {
 app.use(cors(corsOptions)); 
 
 
-app.use("/user", userRoute);
-app.use("/profile", profileRoute);
-app.use("/company", companyRoute);
-app.use("/job", jobRoute);
-app.use("/application", applicationRoute);
+app.use("/api/user", userRoute);
+app.use("/api/profile", profileRoute);
+app.use("/api/company", companyRoute);
+app.use("/api/job", jobRoute);
+app.use("/api/application", applicationRoute);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
