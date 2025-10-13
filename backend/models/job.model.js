@@ -80,16 +80,8 @@ const jobSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
   }
 );
-
-jobSchema.virtual("applications", {
-  ref: "Application",
-  localField: "_id",
-  foreignField: "job",
-});
 
 const Job = mongoose.model("Job", jobSchema);
 

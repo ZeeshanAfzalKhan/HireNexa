@@ -6,6 +6,7 @@ import {
 } from "../utils/fileUpload.js";
 import validator from "validator";
 import containsRestrictedField from "../utils/containsRestrictedFields.js";
+
 export const getProfile = async (req, res) => {
   try {
     const userId = req.user._id;

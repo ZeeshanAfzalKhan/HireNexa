@@ -209,9 +209,9 @@ export const getJobs = async (req, res) => {
     return res.status(200).json({
       message: "Jobs fetched successfully.",
       success: true,
-      page,
-      totalPages,
-      totalJobs,
+      currentPage: page,
+      totalPages: totalPages,
+      totalJobs: totalJobs,
       jobs
     });
 

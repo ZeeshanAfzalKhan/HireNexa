@@ -16,17 +16,16 @@ dotenv.config({});
 const app=express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true})); //this is a middleware that allows the server to read data sent through forms and attach it to the req.body object in the route handlers.
+app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: "*", // Only allow requests from this origin.
-    credentials: true // Allow sending cookies and authentication headers in cross-origin requests.
+    origin: "*", 
+    credentials: true 
 }
 
-app.use(cors(corsOptions)); // this allows the frontend to communicate with the backend.
+app.use(cors(corsOptions)); 
 
-const PORT=process.env.PORT || 3000;
 
 app.use("/user", userRoute);
 app.use("/profile", profileRoute);
@@ -34,6 +33,17 @@ app.use("/company", companyRoute);
 app.use("/job", jobRoute);
 app.use("/application", applicationRoute);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ success: false, message: "Internal Server Error" });
+});
+
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: "Route not found" });
+});
+
+
+const PORT = process.env.PORT || 3000;
 
 connectDB()
 .then(()=>{
