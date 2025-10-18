@@ -165,7 +165,17 @@ export const login = async (req, res) => {
 
 export const oauthCallback = async (req, res) => {
   try {
-    const token = req.user.generateAuthToken();
+    const { user, error } = req.user;
+
+    if(error) {
+      return res.status(400).json({error})
+    }
+
+    // if(user === null) {
+    //   return res.status(400).json({error: "User not found."})
+    // }
+
+    const token = user.generateAuthToken();
 
     const options = {
       httpsOnly: true,
@@ -175,18 +185,16 @@ export const oauthCallback = async (req, res) => {
     res.cookie("token", token, options);
 
     // Redirect user to frontend (without token in URL)
-    res
+    return res
       .status(200)
       // .redirect(`${process.env.FRONTEND_URL}/oauth/callback`)
-      .json(
-        {
+      .json({
         success: true,
-        user: req.user
-        }
-      );
+        user: req.user,
+      });
   } catch (error) {
     console.error("OAuth callback error:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

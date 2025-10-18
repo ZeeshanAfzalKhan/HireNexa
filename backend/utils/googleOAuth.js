@@ -12,9 +12,14 @@ passport.use(
       callbackURL: `${process.env.BACKEND_URL}/api/auth/google/callback`,
       passReqToCallback: true,
     },
-    async (request, accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
        try {
-        const user = await handleOAuthLogin({ provider: "google", profile });
+        const roleFromRequest = req.query.state; // here we read the role
+        const user = await handleOAuthLogin({
+          provider: "google",
+          profile,
+          roleFromRequest,
+        })
         return done(null, user);
       } catch (err) {
         return done(err, null);

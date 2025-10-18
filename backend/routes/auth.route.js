@@ -9,7 +9,13 @@ router.post("/login", login);
 
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  (req, res, next) => {
+    const role = req.query.role; // frontend sends ?role=student
+    passport.authenticate("google", {
+      scope: ["profile", "email"],
+      state: role, // ✅ attach role here
+    })(req, res, next);
+  }
 );
 router.get(
   "/google/callback",
