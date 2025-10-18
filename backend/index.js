@@ -2,6 +2,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import passport from "passport";
+import "./utils/googleOAuth.js";
 
 import connectDB from "./utils/database.js";
 
@@ -15,6 +17,7 @@ dotenv.config({});
 
 const app=express();
 
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -27,7 +30,7 @@ const corsOptions = {
 app.use(cors(corsOptions)); 
 
 
-app.use("/api/user", userRoute);
+app.use("/api/auth", userRoute);
 app.use("/api/profile", profileRoute);
 app.use("/api/company", companyRoute);
 app.use("/api/job", jobRoute);

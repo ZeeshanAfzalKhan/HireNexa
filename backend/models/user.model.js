@@ -7,10 +7,10 @@ const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: [true, "First name is required."],
       trim: true,
       minlength: [2, "First name must be at least 2 characters long."],
       maxlength: [50, "First name cannot exceed 50 characters."],
+      required: [true, "First name is required."],
     },
 
     lastName: {
@@ -32,20 +32,45 @@ const userSchema = new mongoose.Schema(
 
     phoneNumber: {
       type: String,
-      required: [true, "Phone number is required."],
       validate: {
         validator: (value) =>
-          validator.isMobilePhone(value, "any", { strictMode: false }),
+          !value || validator.isMobilePhone(value, "any", { strictMode: false }),
         message: "Please provide a valid phone number.",
       },
     },
 
     password: {
       type: String,
-      required: [true, "Password is required."],
       minlength: [6, "Password must be at least 6 characters long."],
       maxlength: [128, "Password cannot exceed 128 characters."],
+      required: function () {
+        return !this.isOAuthUser;
+      },
     },
+
+    isOAuthUser: {
+      type: Boolean,
+      default: false,
+    },
+
+    // Store multiple OAuth2 provider details
+    authProviders: [
+      {
+        provider: {
+          type: String,
+          enum: ["google", "github", "linkedin"],
+        },
+        providerId: String, // ID from OAuth provider
+        profilePictureURL: {
+          type: String,
+          validate: {
+            validator: (v) => !v || validator.isURL(v),
+            message: "Invalid profile picture URL.",
+          },
+        },
+        
+      },
+    ],
 
     role: {
       type: String,
@@ -67,10 +92,13 @@ const userSchema = new mongoose.Schema(
         type: [String],
         validate: {
           validator: function (skills) {
-            if (!skills || skills.length === 0) return true; // allow empty for now
+            if (!skills || skills.length === 0) return true;
             if (skills.length > 30) return false;
             return skills.every(
-              (s) => typeof s === "string" && s.trim().length >= 2 && s.trim().length <= 50
+              (s) =>
+                typeof s === "string" &&
+                s.trim().length >= 2 &&
+                s.trim().length <= 50
             );
           },
           message:
@@ -79,10 +107,7 @@ const userSchema = new mongoose.Schema(
       },
 
       resume: {
-        resumeOriginalName: {
-          type: String,
-          trim: true,
-        },
+        resumeOriginalName: String,
         resumeURL: {
           type: String,
           validate: {
@@ -90,7 +115,7 @@ const userSchema = new mongoose.Schema(
             message: "Invalid resume URL.",
           },
         },
-        resumePublicId: { type: String },
+        resumePublicId: String,
       },
 
       company: {
@@ -99,7 +124,7 @@ const userSchema = new mongoose.Schema(
       },
 
       profilePicture: {
-        profilePictureOriginalName: { type: String },
+        profilePictureOriginalName: String,
         profilePictureURL: {
           type: String,
           validate: {
@@ -107,7 +132,7 @@ const userSchema = new mongoose.Schema(
             message: "Invalid profile picture URL.",
           },
         },
-        profilePicturePublicId: { type: String },
+        profilePicturePublicId: String,
       },
 
       socials: {
@@ -138,27 +163,33 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// 🔒 Password hashing
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password") || this.isOAuthUser) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
+// ✅ Password check
 userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+// 🧾 JWT generation
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ 
-    _id: this._id,
-    emailId: this.emailId,
-    role: this.role
-  }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.ACCESS_TOKEN_EXPIRE_TIME,
-  });
+  const token = jwt.sign(
+    {
+      _id: this._id,
+      emailId: this.emailId,
+      role: this.role,
+    },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRE_TIME,
+    }
+  );
   return token;
 };
 
 const User = mongoose.model("User", userSchema);
-
 export default User;
