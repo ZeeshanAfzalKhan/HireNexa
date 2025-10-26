@@ -1,18 +1,16 @@
-
-import React from 'react';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import { ThemeProvider } from './contexts/ThemeContext';
-import Navbar from './components/Navbar';
-import LandingPage from './pages/LandingPage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import Dashboard from './pages/Dashboard';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
-import FeaturesPage from './pages/FeaturesPage';
-import JobsPage from './pages/JobsPage';
-import JobDetailsPage from './pages/JobDetailsPage';
-import ProfilePage from './pages/ProfilePage';
+import React from "react";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import Dashboard from "./pages/Dashboard";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
+import FeaturesPage from "./pages/FeaturesPage";
+import JobsPage from "./pages/JobsPage";
+import JobDetailsPage from "./pages/JobDetailsPage";
+import ProfilePage from "./pages/ProfilePage";
 
 // Layout component that includes the navbar
 const Layout = () => {
@@ -24,7 +22,6 @@ const Layout = () => {
   );
 };
 
-
 // Router configuration
 const router = createBrowserRouter([
   {
@@ -33,57 +30,63 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <LandingPage />
+        element: <LandingPage />,
       },
       {
         path: "login",
-        element: <LoginPage />
+        element: <LoginPage />,
       },
       {
         path: "signup",
-        element: <SignupPage />
+        element: <SignupPage />,
       },
       {
         path: "dashboard",
-        element: <Dashboard />
+        element: <Dashboard />,
       },
       {
         path: "about",
-        element: <AboutPage />
+        element: <AboutPage />,
       },
       {
         path: "contact",
-        element: <ContactPage />
+        element: <ContactPage />,
       },
       {
         path: "features",
-        element: <FeaturesPage />
+        element: <FeaturesPage />,
       },
       {
         path: "jobs",
-        element: <JobsPage />
+        element: <JobsPage />,
       },
       {
         path: "jobs/:id",
-        element: <JobDetailsPage />
+        element: <JobDetailsPage />,
       },
       {
         path: "profile",
-        element: <ProfilePage />
+        element: <ProfilePage />,
       },
       {
         path: "companies",
-        element: <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">Companies Page - Coming Soon</h1></div>
-      }
-    ]
-  }
+        element: (
+          <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Companies Page - Coming Soon
+            </h1>
+          </div>
+        ),
+      },
+    ],
+  },
 ]);
 
 function App() {
   return (
-    <ThemeProvider>
+    <>
       <RouterProvider router={router} />
-    </ThemeProvider>
+    </>
   );
 }
 

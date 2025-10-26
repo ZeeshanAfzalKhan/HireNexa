@@ -2,13 +2,13 @@ import React from 'react';
 
 const ContactPage = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-900 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Contact Us
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Have questions or need help? We're here to assist you. 
             Reach out to us and we'll get back to you as soon as possible.
           </p>
@@ -17,73 +17,73 @@ const ContactPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left - Contact Form */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">
+            <h2 className="text-3xl font-bold text-white mb-8">
               Get in Touch
             </h2>
 
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-300 mb-2">
                     First Name
                   </label>
                   <input
                     type="text"
                     id="firstName"
                     name="firstName"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-300 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors"
                     placeholder="Your first name"
                   />
                 </div>
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-300 mb-2">
                     Last Name
                   </label>
                   <input
                     type="text"
                     id="lastName"
                     name="lastName"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-300 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors"
                     placeholder="Your last name"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                   Email Address
                 </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-300 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors"
                   placeholder="your.email@example.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
                   Subject
                 </label>
                 <input
                   type="text"
                   id="subject"
                   name="subject"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-300 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors"
                   placeholder="What's this about?"
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
                   Message
                 </label>
                 <textarea
                   id="message"
                   name="message"
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors resize-none"
+                  className="w-full px-4 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-300 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-colors resize-none"
                   placeholder="Tell us how we can help you..."
                 ></textarea>
               </div>
@@ -100,7 +100,7 @@ const ContactPage = () => {
           {/* Right - Contact Info */}
           <div className="space-y-8">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+              <h3 className="text-2xl font-bold text-white mb-6">
                 Contact Information
               </h3>
 
@@ -112,9 +112,9 @@ const ContactPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900">Email Us</h4>
-                    <p className="text-gray-600">support@hirenexa.com</p>
-                    <p className="text-gray-600">We usually reply within 24 hours.</p>
+                    <h4 className="text-lg font-semibold text-white">Email Us</h4>
+                    <p className="text-gray-300">support@hirenexa.com</p>
+                    <p className="text-gray-300">We usually reply within 24 hours.</p>
                   </div>
                 </div>
 
@@ -125,9 +125,9 @@ const ContactPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900">Call Us</h4>
-                    <p className="text-gray-600">(555) 123-4567</p>
-                    <p className="text-gray-600">Mon–Fri, 9AM–6PM EST</p>
+                    <h4 className="text-lg font-semibold text-white">Call Us</h4>
+                    <p className="text-gray-300">(555) 123-4567</p>
+                    <p className="text-gray-300">Mon–Fri, 9AM–6PM EST</p>
                   </div>
                 </div>
 
@@ -139,8 +139,8 @@ const ContactPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900">Visit Us</h4>
-                    <p className="text-gray-600">
+                    <h4 className="text-lg font-semibold text-white">Visit Us</h4>
+                    <p className="text-gray-300">
                       123 Tech Street<br />
                       San Francisco, CA 94105<br />
                       United States
@@ -150,12 +150,12 @@ const ContactPage = () => {
               </div>
             </div>
 
-            <div className="bg-linear-to-br from-[#34aeeb] to-[#2a8bc7] rounded-2xl p-8 text-white">
+            <div className="bg-gray-800 rounded-2xl p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">Need Immediate Help?</h3>
               <p className="mb-6 opacity-90">
                 Our support team is available 24/7 to help you with any questions or issues you might have.
               </p>
-              <button className="bg-white text-[#34aeeb] hover:bg-gray-100 font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
+              <button className="bg-[#34aeeb] hover:bg-[#2a8bc7] font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
                 Live Chat
               </button>
             </div>

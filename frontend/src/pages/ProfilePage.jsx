@@ -66,14 +66,14 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-100 mb-2">
             Profile Management
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-300">
             Manage your profile information and preferences
           </p>
         </div>
@@ -81,7 +81,7 @@ const ProfilePage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-gray-800 rounded-lg shadow p-6">
               <div className="text-center mb-6">
                 <div className="w-20 h-20 bg-[#34aeeb] rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">
@@ -89,11 +89,11 @@ const ProfilePage = () => {
                     {profileData.personal.lastName[0]}
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-100">
                   {profileData.personal.firstName}{" "}
                   {profileData.personal.lastName}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-300">
                   {profileData.professional.title}
                 </p>
               </div>
@@ -106,7 +106,7 @@ const ProfilePage = () => {
                     className={`w-full flex items-center px-3 py-2 rounded-lg text-left transition-colors ${
                       activeTab === tab.id
                         ? "bg-[#34aeeb] text-white"
-                        : "text-gray-700 hover:bg-gray-100"
+                        : "text-gray-300 hover:bg-gray-700"
                     }`}
                   >
                     <span className="mr-3">{tab.icon}</span>
@@ -119,11 +119,11 @@ const ProfilePage = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg shadow">
+            <div className="bg-gray-800 rounded-lg shadow">
               {/* Tab Header */}
-              <div className="border-b border-gray-200 p-6">
+              <div className="border-b border-gray-700 p-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-gray-900">
+                  <h2 className="text-xl font-semibold text-gray-100">
                     {tabs.find((tab) => tab.id === activeTab)?.label}
                   </h2>
                   <div className="flex space-x-3">
@@ -131,7 +131,7 @@ const ProfilePage = () => {
                       <>
                         <button
                           onClick={() => setIsEditing(false)}
-                          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                          className="px-4 py-2 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-700"
                         >
                           Cancel
                         </button>
@@ -155,13 +155,13 @@ const ProfilePage = () => {
                 </div>
               </div>
 
-              {/* Example tab content (only personal to shorten here) */}
+              {/* Example tab content (personal) */}
               <div className="p-6">
                 {activeTab === "personal" && (
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
                           First Name
                         </label>
                         <input
@@ -175,11 +175,11 @@ const ProfilePage = () => {
                             )
                           }
                           disabled={!isEditing}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#34aeeb] disabled:bg-gray-100"
+                          className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-[#34aeeb] disabled:bg-gray-700 text-gray-100"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
                           Last Name
                         </label>
                         <input
@@ -193,7 +193,7 @@ const ProfilePage = () => {
                             )
                           }
                           disabled={!isEditing}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#34aeeb] disabled:bg-gray-100"
+                          className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-[#34aeeb] disabled:bg-gray-700 text-gray-100"
                         />
                       </div>
                     </div>

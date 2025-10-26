@@ -1,17 +1,12 @@
 @import "tailwindcss";
 
-/* Ensure dark mode works properly */
-html.dark {
-  color-scheme: dark;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #374151;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -23,20 +18,8 @@ html.dark {
   background: #2a8bc7;
 }
 
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-track {
-  background: #374151;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #34aeeb;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #2a8bc7;
-}
-
 /* Smooth transitions */
 * {
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
 }
