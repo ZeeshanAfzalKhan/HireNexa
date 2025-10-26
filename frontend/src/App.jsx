@@ -1,71 +1,88 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import React from 'react';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
+import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import Dashboard from './pages/Dashboard';
-import JobsPage from './pages/JobsPage';
-import CompaniesPage from './pages/CompaniesPage';
-import ProfilePage from './pages/ProfilePage';
-import ApplicationsPage from './pages/ApplicationsPage';
-import FeaturesPage from './pages/FeaturesPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
-import './App.css';
+import FeaturesPage from './pages/FeaturesPage';
+import JobsPage from './pages/JobsPage';
+import JobDetailsPage from './pages/JobDetailsPage';
+import ProfilePage from './pages/ProfilePage';
 
+// Layout component that includes the navbar
+const Layout = () => {
+  return (
+    <div className="min-h-screen transition-colors duration-200">
+      <Navbar />
+      <Outlet />
+    </div>
+  );
+};
+
+
+// Router configuration
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LandingPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignupPage />,
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/jobs",
-    element: <JobsPage />,
-  },
-  {
-    path: "/companies",
-    element: <CompaniesPage />,
-  },
-  {
-    path: "/profile",
-    element: <ProfilePage />,
-  },
-  {
-    path: "/applications",
-    element: <ApplicationsPage />,
-  },
-  {
-    path: "/features",
-    element: <FeaturesPage />,
-  },
-  {
-    path: "/about",
-    element: <AboutPage />,
-  },
-  {
-    path: "/contact",
-    element: <ContactPage />,
-  },
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <LandingPage />
+      },
+      {
+        path: "login",
+        element: <LoginPage />
+      },
+      {
+        path: "signup",
+        element: <SignupPage />
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />
+      },
+      {
+        path: "about",
+        element: <AboutPage />
+      },
+      {
+        path: "contact",
+        element: <ContactPage />
+      },
+      {
+        path: "features",
+        element: <FeaturesPage />
+      },
+      {
+        path: "jobs",
+        element: <JobsPage />
+      },
+      {
+        path: "jobs/:id",
+        element: <JobDetailsPage />
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />
+      },
+      {
+        path: "companies",
+        element: <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">Companies Page - Coming Soon</h1></div>
+      }
+    ]
+  }
 ]);
 
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-        <RouterProvider router={router} />
-      </div>
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }
