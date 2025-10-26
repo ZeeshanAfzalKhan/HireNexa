@@ -168,7 +168,11 @@ export const oauthCallback = async (req, res) => {
     const { user, error } = req.user;
 
     if(error) {
-      return res.status(400).json({error})
+      return res.status(400).json({
+        success: false,
+        message: error,
+        user: null
+      })
     }
 
     // if(user === null) {
