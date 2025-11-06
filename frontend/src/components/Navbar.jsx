@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Jobs', path: '/jobs' },
-    { name: 'Features', path: '/features' },
-    { name: 'Companies', path: '/companies' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    { name: "Home", path: "/" },
+    { name: "Jobs", path: "/jobs" },
+    { name: "Features", path: "/features" },
+    { name: "Companies", path: "/companies" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
@@ -32,13 +32,19 @@ const Navbar = () => {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               {navItems.map((item) => (
-                <Link
+                <NavLink
                   key={item.name}
                   to={item.path}
-                  className="text-gray-300 hover:text-[#34aeeb] px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 active:text-[#34aeeb]"
+                  className={({ isActive }) =>
+                    `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                      isActive
+                        ? "text-[#34aeeb]"
+                        : "text-gray-300 hover:text-[#34aeeb]"
+                    }`
+                  }
                 >
                   {item.name}
-                </Link>
+                </NavLink>
               ))}
             </div>
           </div>
@@ -46,18 +52,31 @@ const Navbar = () => {
           {/* Right side buttons */}
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center space-x-2">
-              <button
-                onClick={() => navigate('/login')}
-                className="text-gray-300 hover:text-[#34aeeb] px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                    isActive
+                      ? "text-[#34aeeb] font-semibold"
+                      : "text-gray-300 hover:text-[#34aeeb]"
+                  }`
+                }
               >
                 Login
-              </button>
-              <button
-                onClick={() => navigate('/signup')}
-                className="bg-[#34aeeb] hover:bg-[#2a8bc7] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+              </NavLink>
+
+              <NavLink
+                to="/signup"
+                className={({ isActive }) =>
+                  `px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    isActive
+                      ? "bg-[#256b97] text-white"
+                      : "bg-[#34aeeb] hover:bg-[#2a8bc7] text-white"
+                  }`
+                }
               >
                 Sign Up
-              </button>
+              </NavLink>
             </div>
 
             {/* Mobile menu button */}
@@ -111,7 +130,7 @@ const Navbar = () => {
                 <div className="flex flex-col space-y-2">
                   <button
                     onClick={() => {
-                      navigate('/login');
+                      navigate("/login");
                       setIsMenuOpen(false);
                     }}
                     className="text-gray-300 hover:text-[#34aeeb] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 text-left"
@@ -120,7 +139,7 @@ const Navbar = () => {
                   </button>
                   <button
                     onClick={() => {
-                      navigate('/signup');
+                      navigate("/signup");
                       setIsMenuOpen(false);
                     }}
                     className="bg-[#34aeeb] hover:bg-[#2a8bc7] text-white px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 text-left"
