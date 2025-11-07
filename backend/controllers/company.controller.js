@@ -12,7 +12,7 @@ export const registerCompany = async (req, res) => {
 
     if (user.role !== "recruitor") {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
@@ -20,14 +20,14 @@ export const registerCompany = async (req, res) => {
     const { companyName, description } = req.body;
     if (!companyName || !description) {
       return res.status(404).json({
-        message: "All fields are required.",
+        error: "All fields are required.",
         success: false,
       });
     }
 
     if (!validator.isLength(companyName, { min: 3, max: 50 })) {
       return res.status(400).json({
-        message:
+        error:
           "Company Company name must be between 3 and 50 characters long.",
         success: false,
       });
@@ -35,7 +35,7 @@ export const registerCompany = async (req, res) => {
 
     if (!validator.isLength(description, { min: 10, max: 200 })) {
       return res.status(400).json({
-        message:
+        error:
           "Company description must be between 10 and 200 characters long.",
         success: false,
       });
@@ -44,7 +44,7 @@ export const registerCompany = async (req, res) => {
     const doesCompanyExists = await Company.findOne({ name: companyName });
     if (doesCompanyExists) {
       return res.status(404).json({
-        message: "Company already registered",
+        error: "Company already registered",
         success: false,
       });
     }
@@ -57,7 +57,7 @@ export const registerCompany = async (req, res) => {
 
     if (!createdCompany) {
       return res.status(404).json({
-        message: "Something went wrong while registering a company",
+        error: "Something went wrong while registering a company",
         success: false,
       });
     }
@@ -73,7 +73,7 @@ export const registerCompany = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message: "Something went wrong",
+      error: "Something went wrong",
       success: false,
     });
   }
@@ -85,7 +85,7 @@ export const getCompanyByUser = async (req, res) => {
 
     if (user.role !== "recruitor") {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
@@ -93,7 +93,7 @@ export const getCompanyByUser = async (req, res) => {
     const company = await Company.findOne({ userId: user._id });
     if (!company) {
       return res.status(404).json({
-        message: "Company not found",
+        error: "Company not found",
         status: false,
       });
     }
@@ -105,7 +105,7 @@ export const getCompanyByUser = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Something went wrong",
+      error: "Something went wrong",
       success: false,
     });
     console.log(err);
@@ -118,7 +118,7 @@ export const getCompanyById = async (req, res) => {
     const company = await Company.findById(companyId);
     if (!company) {
       return res.status(404).json({
-        message: "Company not found",
+        error: "Company not found",
         status: false,
       });
     }
@@ -129,7 +129,7 @@ export const getCompanyById = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Something went wrong",
+      error: "Something went wrong",
       success: false,
     });
     console.log(err);
@@ -141,14 +141,14 @@ export const updateCompany = async (req, res) => {
     const user = req.user;
     if (user.role !== "recruitor") {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
 
     if (!req.body) {
       return res.status(400).json({
-        message: "No data provided",
+        error: "No data provided",
         success: false,
       });
     }
@@ -158,7 +158,7 @@ export const updateCompany = async (req, res) => {
 
     if (!companyId) {
       res.status(400).json({
-        message: "Company id is required",
+        error: "Company id is required",
         success: false,
       });
     }
@@ -167,14 +167,14 @@ export const updateCompany = async (req, res) => {
 
     if (!companyToUpdate) {
       return res.status(404).json({
-        message: "Company not found",
+        error: "Company not found",
         status: false,
       });
     }
 
     if (companyToUpdate.userId.toString() !== user._id.toString()) {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
@@ -191,7 +191,7 @@ export const updateCompany = async (req, res) => {
 
     if (!updatedCompany) {
       return res.status(400).json({
-        message: "Something went wrong while updating company data",
+        error: "Something went wrong while updating company data",
         status: false,
       });
     }
@@ -203,7 +203,7 @@ export const updateCompany = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Something went wrong",
+      error: "Something went wrong",
       success: false,
     });
     console.log(err);
@@ -217,14 +217,14 @@ export const updateCompanyLogo = async (req, res) => {
 
     if (user.role !== "recruitor") {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
 
     if (!logo) {
       return res.status(400).json({
-        message: "No logo provided",
+        error: "No logo provided",
         success: false,
       });
     }
@@ -233,7 +233,7 @@ export const updateCompanyLogo = async (req, res) => {
 
     if (!companyId) {
       return res.status(400).json({
-        message: "Company id is required",
+        error: "Company id is required",
         success: false,
       });
     }
@@ -242,14 +242,14 @@ export const updateCompanyLogo = async (req, res) => {
 
     if (!companyToUpdate) {
       return res.status(404).json({
-        message: "Company not found",
+        error: "Company not found",
         status: false,
       });
     }
 
     if (companyToUpdate.userId.toString() !== user._id.toString()) {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
@@ -258,7 +258,7 @@ export const updateCompanyLogo = async (req, res) => {
 
     if (!response.success) {
       return res.status(400).json({
-        message: "Something went wrong while uploading logo",
+        error: "Something went wrong while uploading logo",
         success: false,
       });
     }
@@ -281,7 +281,7 @@ export const updateCompanyLogo = async (req, res) => {
 
     if (!updatedCompany) {
       return res.status(400).json({
-        message: "Something went wrong while updating company data",
+        error: "Something went wrong while updating company data",
         success: false,
       });
     }
@@ -293,7 +293,7 @@ export const updateCompanyLogo = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Something went wrong",
+      error: "Something went wrong",
       success: false,
     });
     console.log(err);
@@ -305,7 +305,7 @@ export const deleteCompany = async (req, res) => {
     const user = req.user;
     if (user.role !== "recruitor") {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
@@ -314,7 +314,7 @@ export const deleteCompany = async (req, res) => {
 
     if (!companyId) {
       res.status(400).json({
-        message: "Company id is required",
+        error: "Company id is required",
         success: false,
       });
     }
@@ -323,14 +323,14 @@ export const deleteCompany = async (req, res) => {
 
     if (!companyToDelete) {
       return res.status(404).json({
-        message: "Company not found",
+        error: "Company not found",
         status: false,
       });
     }
 
     if (companyToDelete.userId.toString() !== user._id.toString()) {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
@@ -339,7 +339,7 @@ export const deleteCompany = async (req, res) => {
 
     if (!deletedCompany) {
       res.status(400).json({
-        message: "Something went wrong while deleting company data",
+        error: "Something went wrong while deleting company data",
         success: false,
       });
     }
@@ -354,7 +354,7 @@ export const deleteCompany = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Something went wrong",
+      error: "Something went wrong",
       success: false,
     });
     console.log(err);

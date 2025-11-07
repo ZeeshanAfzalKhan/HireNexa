@@ -13,7 +13,7 @@ export const applyJob = async (req, res) => {
     if (!jobId) {
       return res.status(400).json({
         success: false,
-        message: "Job ID is required",
+        error: "Job ID is required",
       });
     }
 
@@ -21,7 +21,7 @@ export const applyJob = async (req, res) => {
     if (!job) {
       return res.status(404).json({
         success: false,
-        message: "Job not found",
+        error: "Job not found",
       });
     }
 
@@ -34,7 +34,7 @@ export const applyJob = async (req, res) => {
     if (existingApplication) {
       return res.status(400).json({
         success: false,
-        message: "You have already applied for this job",
+        error: "You have already applied for this job",
       });
     }
 
@@ -45,7 +45,7 @@ export const applyJob = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        message: "Cover letter must be between 20 and 5000 characters",
+        error: "Cover letter must be between 20 and 5000 characters",
       });
     }
 
@@ -56,7 +56,7 @@ export const applyJob = async (req, res) => {
       if (!resumeFile.mimetype.startsWith("application/pdf")) {
         return res.status(400).json({
           success: false,
-          message: "Resume must be a PDF file",
+          error: "Resume must be a PDF file",
         });
       }
 
@@ -65,7 +65,7 @@ export const applyJob = async (req, res) => {
       if (!uploadResult.success) {
         return res.status(500).json({
           success: false,
-          message: "Error uploading resume",
+          error: "Error uploading resume",
         });
       }
 
@@ -80,11 +80,9 @@ export const applyJob = async (req, res) => {
     } else {
       return res.status(400).json({
         success: false,
-        message: "Please upload a resume",
+        error: "Please upload a resume",
       });
     }
-
-    console.log(resumeData);
 
     // Create application
     const application = await Application.create({
@@ -103,7 +101,7 @@ export const applyJob = async (req, res) => {
     console.error("Error in applyJob:", err);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: "Internal server error",
     });
   }
 };
@@ -130,7 +128,7 @@ export const getAppliedJobs = async (req, res) => {
 
     if (!applications) {
       return res.status(404).json({
-        message: "No jobs found",
+        error: "No jobs found",
         success: false,
       });
     }
@@ -152,7 +150,7 @@ export const getAppliedJobs = async (req, res) => {
     console.error(err);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: "Internal server error",
     });
   }
 };
@@ -168,22 +166,22 @@ export const getApplications = async (req, res) => {
 
     if (user.role !== "recruitor") {
       return res.status(401).json({
-        message: "Unauthorized access",
+        error: "Unauthorized access",
         success: false,
       });
     }
 
     if (!user?.profile?.company?.equals(jobId?.company)) {
       return res.status(401).json({
-        message: "Unauthorized access",
         success: false,
+        error: "Unauthorized access",
       });
     }
 
     if (!jobId) {
       return res.status(400).json({
         success: false,
-        message: "Job ID is required",
+        error: "Job ID is required",
       });
     }
 
@@ -201,7 +199,7 @@ export const getApplications = async (req, res) => {
 
     if (!applications) {
       return res.status(404).json({
-        message: "Job not found",
+        error: "Job not found",
         success: false,
       });
     }
@@ -218,7 +216,7 @@ export const getApplications = async (req, res) => {
     console.error(err);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: "Internal server error",
     });
   }
 };
@@ -231,8 +229,8 @@ export const updateStatus = async (req, res) => {
 
     if (user.role !== "recruitor") {
       return res.status(401).json({
-        message: "Unauthorized access",
         success: false,
+        error: "Unauthorized access",
       });
     }
 
@@ -243,30 +241,30 @@ export const updateStatus = async (req, res) => {
 
     if (!application) {
       return res.status(404).json({
-        message: "Application not found",
         success: false,
+        error: "Application not found",
       });
     }
 
     // Check if recruiter belongs to the same company as the job
     if (!user?.profile?.company?.equals(application.job.company)) {
       return res.status(401).json({
-        message: "Unauthorized access",
         success: false,
+        error: "Unauthorized access",
       });
     }
 
     if (!status) {
       return res.status(400).json({
-        message: "Status is required",
         success: false,
+        error: "Status is required",
       });
     }
 
     if (application.status !== "pending") {
       return res.status(400).json({
         success: false,
-        message: `Only pending applications can be updated. Current status: ${application.status}`,
+        error: `Only pending applications can be updated. Current status: ${application.status}`,
       });
     }
 
@@ -281,8 +279,8 @@ export const updateStatus = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message: "Internal server error",
       success: false,
+      error: "Internal server error",
     });
   }
 };

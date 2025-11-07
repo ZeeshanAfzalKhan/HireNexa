@@ -7,46 +7,46 @@ export const signup = async (req, res) => {
       req.body;
     if (!firstName) {
       return res.status(400).json({
-        message: "Please enter your Name.",
         success: false,
+        error: "Please enter your Name.",
       });
     } else if (!validator.isLength(firstName, { min: 3, max: 20 })) {
       return res.status(400).json({
-        message: "Name must be between 3 and 20 characters.",
         success: false,
+        error: "Name must be between 3 and 20 characters.",
       });
     } else if (lastName && !validator.isLength(lastName, { min: 3, max: 20 })) {
       return res.status(400).json({
-        message: "Name must be between 3 and 20 characters.",
         success: false,
+        error: "Name must be between 3 and 20 characters.",
       });
     } else if (!validator.isMobilePhone(phoneNumber, "en-IN")) {
       return res.status(400).json({
-        message: "Invalid phone number.",
         success: false,
+        error: "Invalid phone number.",
       });
     } else if (!validator.isEmail(emailId)) {
       return res.status(400).json({
-        message: "Invalid email.",
         success: false,
+        error: "Invalid email.",
       });
     } else if (!validator.isStrongPassword(password)) {
       return res.status(400).json({
-        message: "Enter a strong password",
         success: false,
+        error: "Enter a strong password",
       });
     } else if (!["student", "recruitor"].includes(role)) {
       return res.status(400).json({
-        message: "Invalid role",
         success: false,
+        error: "Invalid role",
       });
     }
 
     const existingUser = await User.findOne({ emailId });
     if (existingUser) {
       return res.status(400).json({
-        message: "User already exists. Please login",
         success: false,
+        error: "User already exists. Please login",
       });
     }
 
@@ -63,9 +63,8 @@ export const signup = async (req, res) => {
 
     if (!createdUser) {
       return res.status(400).json({
-        message: "Something went wrong while registering the user.",
-        user: createdUser,
         success: false,
+        error: "Something went wrong while registering the user.",
       });
     }
 
@@ -83,8 +82,8 @@ export const signup = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Internal Server Error",
       success: false,
+      error: "Internal Server Error",
     });
     console.log(err);
   }
@@ -95,21 +94,21 @@ export const login = async (req, res) => {
     const { emailId, password, role } = req.body;
     if (!emailId || !password || !role) {
       return res.status(400).json({
-        message: "Please fill all the fields.",
         success: false,
+        error: "Please fill all the fields.",
       });
     }
 
     if (!validator.isEmail(emailId)) {
       return res.status(400).json({
-        message: "Invalid email.",
+        error: "Invalid email.",
         success: false,
       });
     }
 
     if (!["student", "recruitor"].includes(role)) {
       return res.status(400).json({
-        message: "Invalid role.",
+        error: "Invalid role.",
         success: false,
       });
     }
@@ -117,7 +116,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({ emailId });
     if (!user) {
       return res.status(400).json({
-        message: "User not found. Please signup!",
+        error: "User not found. Please signup!",
         success: false,
       });
     }
@@ -125,14 +124,14 @@ export const login = async (req, res) => {
     const isPasswordValid = await user.isPasswordCorrect(password);
     if (!isPasswordValid) {
       return res.status(400).json({
-        message: "Invalid Password.",
+        error: "Invalid Password.",
         success: false,
       });
     }
 
     if (role !== user.role) {
       return res.status(400).json({
-        message: "Account doesn't exists with current role.",
+        error: "Account doesn't exists with current role.",
         success: false,
       });
     }
@@ -156,7 +155,7 @@ export const login = async (req, res) => {
       });
   } catch (err) {
     res.status(500).json({
-      message: "Internal Server Error",
+      error: "Internal Server Error",
       success: false,
     });
     console.log(err.message);
@@ -170,7 +169,7 @@ export const oauthCallback = async (req, res) => {
     if(error) {
       return res.status(400).json({
         success: false,
-        message: error,
+        error: error,
         user: null
       })
     }
@@ -210,7 +209,7 @@ export const logout = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Internal Server Error",
+      error: "Internal Server Error",
       success: false,
     });
     console.log(err);
