@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import MessageDisplay from "./components/MessageDisplay";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -17,6 +18,7 @@ const Layout = () => {
   return (
     <div className="min-h-screen transition-colors duration-200">
       <Navbar />
+      <MessageDisplay />
       <Outlet />
     </div>
   );
