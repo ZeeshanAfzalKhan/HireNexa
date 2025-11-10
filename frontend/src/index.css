@@ -23,3 +23,14 @@
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
     color 0.2s ease-in-out;
 }
+
+/* Responsive content margin for fixed Sidebar */
+:root {
+  --sidebar-width: 16rem; /* default expanded width */
+}
+
+@media (min-width: 768px) {
+  .with-sidebar-md {
+    margin-left: var(--sidebar-width);
+  }
+}

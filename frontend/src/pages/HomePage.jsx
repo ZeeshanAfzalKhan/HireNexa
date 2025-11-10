@@ -16,10 +16,16 @@ const LandingPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/signup"
+              to="/signup/student"
               className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg"
             >
-              Get Started Free
+              Get Started Free (Student)
+            </Link>
+            <Link
+              to="/signup/recruitor"
+              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg"
+            >
+              Recruiter Signup
             </Link>
             <Link
               to="/jobs"
@@ -119,10 +125,16 @@ const LandingPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/signup"
+              to="/signup/student"
               className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg"
             >
-              Create Account
+              Student Signup
+            </Link>
+            <Link
+              to="/signup/recruitor"
+              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg"
+            >
+              Recruiter Signup
             </Link>
             <Link
               to="/about"
@@ -134,49 +146,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-[#34aeeb] rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">H</span>
-                </div>
-                <span className="text-xl font-bold">HireNexa</span>
-              </div>
-              <p>Connecting talented professionals with amazing opportunities.</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">For Job Seekers</h3>
-              <ul className="space-y-2">
-                <li><Link to="/jobs" className="hover:text-white transition-colors">Browse Jobs</Link></li>
-                <li><Link to="/companies" className="hover:text-white transition-colors">Companies</Link></li>
-                <li><Link to="/profile" className="hover:text-white transition-colors">Profile</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">For Employers</h3>
-              <ul className="space-y-2">
-                <li><Link to="/signup?role=recruiter" className="hover:text-white transition-colors">Post Jobs</Link></li>
-                <li><Link to="/companies" className="hover:text-white transition-colors">Find Talent</Link></li>
-                <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Support</h3>
-              <ul className="space-y-2">
-                <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                <li><Link to="/about" className="hover:text-white transition-colors">Help Center</Link></li>
-                <li><Link to="/about" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 HireNexa. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      {/* Footer removed to avoid duplicate; global Footer handles site-wide footer */}
     </div>
   );
 };

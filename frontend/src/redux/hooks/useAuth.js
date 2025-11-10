@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useCallback } from "react";
 import { 
   login, 
   signup, 
@@ -24,16 +24,12 @@ export const useAuth = () => {
   const error = useSelector(selectAuthError);
   const message = useSelector(selectAuthMessage);
 
-  const handleLogin = (credentials) => dispatch(login(credentials));
-  const handleSignup = (userData) => dispatch(signup(userData));
-  const handleLogout = () => dispatch(logout());
-  const handleGetCurrentUser = () => dispatch(getCurrentUser());
+  const handleLogin = useCallback((credentials) => dispatch(login(credentials)), [dispatch]);
+  const handleSignup = useCallback((userData) => dispatch(signup(userData)), [dispatch]);
+  const handleLogout = useCallback(() => dispatch(logout()), [dispatch]);
+  const handleGetCurrentUser = useCallback(() => dispatch(getCurrentUser()), [dispatch]);
 
-  useEffect(() => {
-    if (!user && isAuthenticated) {
-      handleGetCurrentUser();
-    }
-  }, [dispatch, user, isAuthenticated]);
+  // Avoid auto-fetch loops; allow the app to explicitly hydrate on mount.
 
   return {
     auth,

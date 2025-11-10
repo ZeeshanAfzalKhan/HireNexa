@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -27,7 +27,7 @@ export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async (profileData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put("/profile/update", profileData);
+      const response = await axiosInstance.patch("/profile/update", profileData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to update profile");
@@ -51,7 +51,7 @@ export const changePassword = createAsyncThunk(
   "profile/changePassword",
   async (passwordData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/profile/change-password", passwordData);
+      const response = await axiosInstance.patch("/profile/change-password", passwordData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to change password");
@@ -66,7 +66,7 @@ export const uploadProfilePicture = createAsyncThunk(
       const formData = new FormData();
       formData.append("profilePicture", profilePicture);
       
-      const response = await axiosInstance.post("/profile/upload-profile", formData, {
+      const response = await axiosInstance.patch("/profile/profile-picture/update", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -85,7 +85,7 @@ export const uploadResume = createAsyncThunk(
       const formData = new FormData();
       formData.append("resume", resume);
       
-      const response = await axiosInstance.post("/profile/upload-resume", formData, {
+      const response = await axiosInstance.patch("/profile/resume/update", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -198,7 +198,8 @@ const profileSlice = createSlice({
       .addCase(uploadProfilePicture.fulfilled, (state, action) => {
         state.loading = false;
         if (state.profile) {
-          state.profile.profilePicture = action.payload.user.profilePicture;
+          state.profile.profile = state.profile.profile || {};
+          state.profile.profile.profilePicture = action.payload.user.profile?.profilePicture;
         }
         state.message = action.payload.message || "Profile picture uploaded successfully";
       })
@@ -217,7 +218,8 @@ const profileSlice = createSlice({
       .addCase(uploadResume.fulfilled, (state, action) => {
         state.loading = false;
         if (state.profile) {
-          state.profile.resume = action.payload.user.resume;
+          state.profile.profile = state.profile.profile || {};
+          state.profile.profile.resume = action.payload.user.profile?.resume;
         }
         state.message = action.payload.message || "Resume uploaded successfully";
       })

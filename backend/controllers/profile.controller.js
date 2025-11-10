@@ -15,8 +15,11 @@ export const getProfile = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
-        error: "User not found",
         success: false,
+        error: {
+          code: "USER_NOT_FOUND",
+          message: "User not found",
+        },
       });
     }
 
@@ -28,7 +31,13 @@ export const getProfile = async (req, res) => {
     console.error(error);
     return res
       .status(500)
-      .json({ success: false, error: "Something went wrong" });
+      .json({
+        success: false,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+        },
+      });
   }
 };
 
@@ -38,8 +47,11 @@ export const changePassword = async (req, res) => {
 
     if (!currentPassword || !newPassword) {
       return res.status(400).json({
-        error: "All fields are required",
         success: false,
+        error: {
+          code: "MISSING_FIELDS",
+          message: "All fields are required",
+        },
       });
     }
 
@@ -49,8 +61,11 @@ export const changePassword = async (req, res) => {
 
     if (!loggedInUser) {
       return res.status(404).json({
-        error: "User not found",
         success: false,
+        error: {
+          code: "USER_NOT_FOUND",
+          message: "User not found",
+        },
       });
     }
 
@@ -60,15 +75,21 @@ export const changePassword = async (req, res) => {
 
     if (!iscurrentPasswordCorrect) {
       return res.status(400).json({
-        error: "Incorrect password",
         success: false,
+        error: {
+          code: "INCORRECT_PASSWORD",
+          message: "Incorrect password",
+        },
       });
     }
 
     if (!validator.isStrongPassword(newPassword)) {
       return res.status(400).json({
-        error: "Enter a Strong Password",
         success: false,
+        error: {
+          code: "WEAK_PASSWORD",
+          message: "Enter a Strong Password",
+        },
       });
     }
 
@@ -83,8 +104,11 @@ export const changePassword = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      error: "Something went wrong",
       success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
     });
   }
 };
@@ -105,8 +129,10 @@ export const updateProfile = async (req, res) => {
     if (containsRestrictedField(req.body, restrictedFields)) {
       return res.status(400).json({
         success: false,
-        message:
-          "You are not allowed to update email, password, or file URLs directly",
+        error: {
+          code: "RESTRICTED_FIELDS",
+          message: "You are not allowed to update email, password, or file URLs directly",
+        },
       });
     } else if (
       updates.firstName &&
@@ -114,7 +140,10 @@ export const updateProfile = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        error: "First name must be between 3 and 20 characters",
+        error: {
+          code: "INVALID_FIRST_NAME",
+          message: "First name must be between 3 and 20 characters",
+        },
       });
     } else if (
       updates.lastName &&
@@ -122,7 +151,10 @@ export const updateProfile = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        error: "Last name must be between 3 and 20 characters",
+        error: {
+          code: "INVALID_LAST_NAME",
+          message: "Last name must be between 3 and 20 characters",
+        },
       });
     } else if (
       updates.profile.bio &&
@@ -130,7 +162,10 @@ export const updateProfile = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        error: "Bio must be between 0 and 200 characters",
+        error: {
+          code: "INVALID_BIO",
+          message: "Bio must be between 0 and 200 characters",
+        },
       });
     } else if (
       updates.phoneNumber &&
@@ -138,22 +173,31 @@ export const updateProfile = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        error: "Invalid contact number",
+        error: {
+          code: "INVALID_PHONE_NUMBER",
+          message: "Invalid contact number",
+        },
       });
     } else if (updates.profile.skills) {
       const skills = updates.profile.skills;
       console.log(skills);
       if (!Array.isArray(skills)) {
         return res.status(400).json({
-          error: "Skills must be an array.",
           success: false,
+          error: {
+            code: "INVALID_SKILLS_FORMAT",
+            message: "Skills must be an array.",
+          },
         });
       }
 
       if (skills.length > 15) {
         return res.status(400).json({
-          error: "You can specify a maximum of 15 skills.",
           success: false,
+          error: {
+            code: "TOO_MANY_SKILLS",
+            message: "You can specify a maximum of 15 skills.",
+          },
         });
       }
 
@@ -163,8 +207,11 @@ export const updateProfile = async (req, res) => {
           !validator.isLength(skill.trim(), { min: 3, max: 30 })
         ) {
           return res.status(400).json({
-            error: "Each skill must be between 3 and 30 characters long.",
             success: false,
+            error: {
+              code: "INVALID_SKILL_LENGTH",
+              message: "Each skill must be between 3 and 30 characters long.",
+            },
           });
         }
       }
@@ -189,7 +236,13 @@ export const updateProfile = async (req, res) => {
     console.error(error);
     return res
       .status(500)
-      .json({ success: false, error: "Something went wrong" });
+      .json({
+        success: false,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+        },
+      });
   }
 };
 
@@ -201,7 +254,10 @@ export const updateProfilePicture = async (req, res) => {
     if (!profilePicture) {
       return res.status(400).json({
         success: false,
-        error: "Profile picture is required",
+        error: {
+          code: "MISSING_PROFILE_PICTURE",
+          message: "Profile picture is required",
+        },
       });
     }
     const user = await User.findById(userId).select("-password");
@@ -211,7 +267,10 @@ export const updateProfilePicture = async (req, res) => {
     if (!response.success) {
       return res.status(400).json({
         success: false,
-        error: "Something went wrong while uploading profile picture",
+        error: {
+          code: "PROFILE_PICTURE_UPLOAD_FAILED",
+          message: "Something went wrong while uploading profile picture",
+        },
       });
     }
 
@@ -237,7 +296,13 @@ export const updateProfilePicture = async (req, res) => {
     console.error(error);
     return res
       .status(500)
-      .json({ success: false, error: "Something went wrong" });
+      .json({
+        success: false,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+        },
+      });
   }
 };
 
@@ -250,14 +315,20 @@ export const deleteProfilePicture = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         success: false,
-        error: "User not found",
+        error: {
+          code: "USER_NOT_FOUND",
+          message: "User not found",
+        },
       });
     }
 
     if (!user?.profile?.profilePicture?.profilePicturePublicId?.trim()) {
       return res.status(400).json({
         success: false,
-        error: "Profile picture not found",
+        error: {
+          code: "PROFILE_PICTURE_NOT_FOUND",
+          message: "Profile picture not found",
+        },
       });
     }
 
@@ -280,7 +351,13 @@ export const deleteProfilePicture = async (req, res) => {
     console.error(error);
     return res
       .status(500)
-      .json({ success: false, error: "Something went wrong" });
+      .json({
+        success: false,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+        },
+      });
   }
 };
 
@@ -290,9 +367,12 @@ export const updateResume = async (req, res) => {
     const resume = req.file;
 
     if (!resume) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
-        error: "Resume is required",
+        error: {
+          code: "MISSING_RESUME",
+          message: "Resume is required",
+        },
       });
     }
     const user = await User.findById(userId).select("-password");
@@ -300,9 +380,12 @@ export const updateResume = async (req, res) => {
     const response = await uploadToCloudinary(resume);
 
     if (!response.success) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
-        error: "Something went wrong while uploading resume",
+        error: {
+          code: "RESUME_UPLOAD_FAILED",
+          message: "Something went wrong while uploading resume",
+        },
       });
     }
 
@@ -325,7 +408,13 @@ export const updateResume = async (req, res) => {
     console.error(error);
     return res
       .status(500)
-      .json({ success: false, error: "Something went wrong" });
+      .json({
+        success: false,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+        },
+      });
   }
 };
 
@@ -336,9 +425,12 @@ export const deleteResume = async (req, res) => {
     const user = await User.findById(userId).select("-password");
 
     if (!user.profile.resume.resumePublicId) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
-        error: "Resume not found",
+        error: {
+          code: "RESUME_NOT_FOUND",
+          message: "Resume not found",
+        },
       });
     }
 
@@ -359,6 +451,12 @@ export const deleteResume = async (req, res) => {
     console.error(error);
     return res
       .status(500)
-      .json({ success: false, error: "Something went wrong" });
+      .json({
+        success: false,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+        },
+      });
   }
 };

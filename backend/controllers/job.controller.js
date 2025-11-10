@@ -6,11 +6,14 @@ export const postJob = async (req, res) => {
     const user = req.user;
 
     if(user.role != "recruitor") {
-        res
+        return res
             .status(400)
             .json({
-                error: "Unauthorized access",
                 success: false,
+                error: {
+                  code: "UNAUTHORIZED_ACCESS",
+                  message: "Unauthorized access",
+                },
             });
     }
 
@@ -43,35 +46,50 @@ export const postJob = async (req, res) => {
 
     if (missingFields.length > 0) {
       return res.status(400).json({
-        error: `Enter the fields: ${missingFields.join(", ")}`,
         success: false,
+        error: {
+          code: "MISSING_FIELDS",
+          message: `Enter the fields: ${missingFields.join(", ")}`,
+        },
       });
     }
 
     if (!validator.isLength(title, { min: 5, max: 50 })) {
       return res.status(400).json({
-        error: "Title should be between 5 and 50 characters.",
         success: false,
+        error: {
+          code: "INVALID_TITLE",
+          message: "Title should be between 5 and 50 characters.",
+        },
       });
     } else if (
       !validator.isLength(description, { min: 10, max: 5000 })
     ) {
       return res.status(400).json({
-        error: "Description should be between 10 and 5000 characters.",
         success: false,
+        error: {
+          code: "INVALID_DESCRIPTION",
+          message: "Description should be between 10 and 5000 characters.",
+        },
       });
     } else if (!Array.isArray(skillRequired)) {
       return res.status(400).json({
-        error: "Requirements must be an array.",
         success: false,
+        error: {
+          code: "INVALID_SKILLS_FORMAT",
+          message: "Requirements must be an array.",
+        },
       });
     } else if (
       req.body.skillRequired.length < 2 ||
       req.body.skillRequired.length > 20
     ) {
       return res.status(400).json({
-        error: "Requirements should contain between 1 and 20 items.",
         success: false,
+        error: {
+          code: "INVALID_SKILLS_COUNT",
+          message: "Requirements should contain between 1 and 20 items.",
+        },
       });
     } else if (
       req.body.skillRequired.some(
@@ -80,44 +98,67 @@ export const postJob = async (req, res) => {
       )
     ) {
       return res.status(400).json({
-        error:
-          "Each requirement should be a string between 2 and 100 characters.",
         success: false,
+        error: {
+          code: "INVALID_SKILL_LENGTH",
+          message: "Each requirement should be a string between 2 and 100 characters.",
+        },
       });
     } else if(!validator.isNumeric(salary.toString())){
       return res.status(400).json({
-        error: "Salary must be a number.",
         success: false,
+        error: {
+          code: "INVALID_SALARY_FORMAT",
+          message: "Salary must be a number.",
+        },
       });
     } else if(salary < 0){
       return res.status(400).json({
-        error: "Salary must be a positive number.",
         success: false,
+        error: {
+          code: "INVALID_SALARY_VALUE",
+          message: "Salary must be a positive number.",
+        },
       });
     } else if(!validator.isNumeric(experience.toString())){
       return res.status(400).json({
-        error: "Experience must be a number.",
         success: false,
+        error: {
+          code: "INVALID_EXPERIENCE_FORMAT",
+          message: "Experience must be a number.",
+        },
       });
     } else if(!validator.isLength(location, { min: 10, max: 500 })){
       return res.status(400).json({
-        error: "Location should be between 10 and 500 characters.",
         success: false,
+        error: {
+          code: "INVALID_LOCATION",
+          message: "Location should be between 10 and 500 characters.",
+        },
       });
     } else if(!validator.isLength(jobType, { min: 2, max: 50 })){
       return res.status(400).json({
-        error: "Job type should be between 2 and 50 characters.",
         success: false,
+        error: {
+          code: "INVALID_JOB_TYPE",
+          message: "Job type should be between 2 and 50 characters.",
+        },
       });
     } else if(!validator.isNumeric(position.toString())){
       return res.status(400).json({
-        error: "Position must be a number.",
         success: false,
+        error: {
+          code: "INVALID_POSITION_FORMAT",
+          message: "Position must be a number.",
+        },
       });
     } else if(position < 1){
       return res.status(400).json({
-        error: "There must be at least 1 open position.",
         success: false,
+        error: {
+          code: "INVALID_POSITION_VALUE",
+          message: "There must be at least 1 open position.",
+        },
       });
     }
 
@@ -136,8 +177,11 @@ export const postJob = async (req, res) => {
 
     if(!createdJob) {
         return res.status(500).json({
-            error: "Something went wrong while posting a job",
             success: false,
+            error: {
+              code: "JOB_CREATION_FAILED",
+              message: "Something went wrong while posting a job",
+            },
         });
     }
 
@@ -149,8 +193,11 @@ export const postJob = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      error: "Something went wrong",
       success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
     });
   }
 };
@@ -218,8 +265,11 @@ export const getJobs = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      error: false,
-      message: "Something went wrong"
+      success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
     });
   }
 };
@@ -232,8 +282,11 @@ export const getJobById = async (req, res) => {
 
     if (!job) {
       return res.status(404).json({
-        error: "Job not found.",
         success: false,
+        error: {
+          code: "JOB_NOT_FOUND",
+          message: "Job not found.",
+        },
       });
     }
 
@@ -245,8 +298,11 @@ export const getJobById = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      error: "Something went wrong",
       success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
     });
   }
 };
@@ -257,8 +313,11 @@ export const getAdminJobs = async (req, res) => {
 
     if(user.role !== "recruitor") {
         return res.status(401).json({
-            error: "Unauthorized access",
             success: false,
+            error: {
+              code: "UNAUTHORIZED_ACCESS",
+              message: "Unauthorized access",
+            },
         });
     }
 
@@ -266,8 +325,11 @@ export const getAdminJobs = async (req, res) => {
 
     if (!jobs) {
       return res.status(404).json({
-        error: "No jobs found.",
         success: false,
+        error: {
+          code: "NO_JOBS_FOUND",
+          message: "No jobs found.",
+        },
       });
     }
 
@@ -279,8 +341,11 @@ export const getAdminJobs = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      error: "Something went wrong",
       success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
     });
   }
 };

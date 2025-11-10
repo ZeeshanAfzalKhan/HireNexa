@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const JobDetailsPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
@@ -54,10 +55,8 @@ const JobDetailsPage = () => {
 
   const handleApply = async () => {
     setApplying(true);
-    setTimeout(() => {
-      setApplying(false);
-      alert("Application submitted successfully!");
-    }, 2000);
+    navigate(`/apply/${id}`);
+    setApplying(false);
   };
 
   if (loading) {
@@ -136,7 +135,7 @@ const JobDetailsPage = () => {
               <button
                 onClick={handleApply}
                 disabled={applying}
-                className="w-full bg-[#34aeeb] hover:bg-[#2a8bc7] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#34aeeb] hover:bg-[#2a8bc7] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {applying ? "Applying..." : "Apply Now"}
               </button>

@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useCallback } from "react";
 import { 
   getProfile,
   updateProfile,
@@ -22,13 +23,13 @@ export const useProfile = () => {
   const error = useSelector(selectProfileError);
   const message = useSelector(selectProfileMessage);
 
-  const handleGetProfile = () => dispatch(getProfile());
-  const handleUpdateProfile = (profileData) => dispatch(updateProfile(profileData));
-  const handleDeleteProfile = () => dispatch(deleteProfile());
-  const handleChangePassword = (passwordData) => dispatch(changePassword(passwordData));
-  const handleUploadProfilePicture = (profilePicture) => dispatch(uploadProfilePicture(profilePicture));
-  const handleUploadResume = (resume) => dispatch(uploadResume(resume));
-  const handleSetProfile = (profile) => dispatch(setProfile(profile));
+  const handleGetProfile = useCallback(() => dispatch(getProfile()), [dispatch]);
+  const handleUpdateProfile = useCallback((profileData) => dispatch(updateProfile(profileData)), [dispatch]);
+  const handleDeleteProfile = useCallback(() => dispatch(deleteProfile()), [dispatch]);
+  const handleChangePassword = useCallback((passwordData) => dispatch(changePassword(passwordData)), [dispatch]);
+  const handleUploadProfilePicture = useCallback((profilePicture) => dispatch(uploadProfilePicture(profilePicture)), [dispatch]);
+  const handleUploadResume = useCallback((resume) => dispatch(uploadResume(resume)), [dispatch]);
+  const handleSetProfile = useCallback((profile) => dispatch(setProfile(profile)), [dispatch]);
 
   return {
     profile,

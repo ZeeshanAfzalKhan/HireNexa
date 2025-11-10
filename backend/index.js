@@ -23,18 +23,18 @@ app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: "*", 
-    credentials: true 
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true 
 }
 
 app.use(cors(corsOptions)); 
 
 
-app.use("/api/auth", userRoute);
-app.use("/api/profile", profileRoute);
-app.use("/api/company", companyRoute);
-app.use("/api/job", jobRoute);
-app.use("/api/application", applicationRoute);
+app.use("/api/v1/auth", userRoute);
+app.use("/api/v1/profile", profileRoute);
+app.use("/api/v1/company", companyRoute);
+app.use("/api/v1/job", jobRoute);
+app.use("/api/v1/application", applicationRoute);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
@@ -10,6 +10,7 @@ const JobsPage = () => {
     jobType: '',
     experience: '',
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Mock data - replace with actual API call
@@ -204,7 +205,10 @@ const JobsPage = () => {
                     >
                       View Details
                     </Link>
-                    <button className="border border-[#34aeeb] text-[#34aeeb] hover:bg-[#34aeeb] hover:text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200">
+                    <button
+                      onClick={() => navigate(`/apply/${job.id}`)}
+                      className="border border-[#34aeeb] text-[#34aeeb] hover:bg-[#34aeeb] hover:text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer"
+                    >
                       Quick Apply
                     </button>
                   </div>

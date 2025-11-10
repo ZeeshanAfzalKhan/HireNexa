@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -16,11 +16,12 @@ export const applyToJob = createAsyncThunk(
   async ({ jobId, applicationData }, { rejectWithValue }) => {
     try {
       const formData = new FormData();
-      formData.append("name", applicationData.name);
-      formData.append("email", applicationData.email);
-      formData.append("phone", applicationData.phone);
-      formData.append("address", applicationData.address);
-      formData.append("resume", applicationData.resume);
+      if (applicationData.coverLetter) {
+        formData.append("coverLetter", applicationData.coverLetter);
+      }
+      if (applicationData.resume) {
+        formData.append("resume", applicationData.resume);
+      }
       
       const response = await axiosInstance.post(`/application/apply/${jobId}`, formData, {
         headers: {
@@ -50,7 +51,7 @@ export const getApplications = createAsyncThunk(
   "application/getApplications",
   async (jobId, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/application/${jobId}`);
+      const response = await axiosInstance.get(`/application/${jobId}/applications`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to fetch applications");
@@ -62,7 +63,7 @@ export const updateApplicationStatus = createAsyncThunk(
   "application/updateApplicationStatus",
   async ({ applicationId, status }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`/application/status/${applicationId}`, { status });
+      const response = await axiosInstance.post(`/application/status/${applicationId}/update`, { status });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to update application status");

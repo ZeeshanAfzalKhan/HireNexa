@@ -90,7 +90,7 @@ const ContactPage = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#34aeeb] hover:bg-[#2a8bc7] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+                className="w-full bg-[#34aeeb] hover:bg-[#2a8bc7] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer"
               >
                 Send Message
               </button>
@@ -155,7 +155,7 @@ const ContactPage = () => {
               <p className="mb-6 opacity-90">
                 Our support team is available 24/7 to help you with any questions or issues you might have.
               </p>
-              <button className="bg-[#34aeeb] hover:bg-[#2a8bc7] font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
+              <button className="bg-[#34aeeb] hover:bg-[#2a8bc7] font-semibold py-2 px-6 rounded-lg transition-colors duration-200 cursor-pointer">
                 Live Chat
               </button>
             </div>

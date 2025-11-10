@@ -6,8 +6,11 @@ const userAuth = async (req, res, next) => {
         const token = req?.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
         if(!token){
             return res.status(401).json({
-                error: "Please login!",
                 success: false,
+                error: {
+                    code: "MISSING_TOKEN",
+                    message: "Please login!",
+                },
             });
         }
 
@@ -15,8 +18,11 @@ const userAuth = async (req, res, next) => {
 
         if(!decodedObj){
             return res.status(401).json({
-                error: "Authentication Denied.",
                 success: false,
+                error: {
+                    code: "AUTHENTICATION_DENIED",
+                    message: "Authentication Denied.",
+                },
             });
         }
 
@@ -26,18 +32,23 @@ const userAuth = async (req, res, next) => {
 
         if(!user){
             return res.status(404).json({
-                error: "User not found",
                 success: false,
+                error: {
+                    code: "USER_NOT_FOUND",
+                    message: "User not found",
+                },
             });
         }
         req.user = user;
-;
         next();
     }
     catch(err){
         res.status(500).json({
-            error: "Something went wrong",
             success: false,
+            error: {
+                code: "INTERNAL_SERVER_ERROR",
+                message: "Something went wrong",
+            },
         });
         console.log(err);        
     }

@@ -1,25 +1,52 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import MessageDisplay from "./components/MessageDisplay";
-import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import Dashboard from "./pages/Dashboard";
+import Footer from "./components/Footer";
+import HomePage from "./pages/HomePage";
+import LoginStudent from "./pages/LoginStudent";
+import LoginRecruitor from "./pages/LoginRecruitor";
+import SignupStudent from "./pages/SignupStudent";
+import SignupRecruitor from "./pages/SignupRecruitor";
+import CandidateDashboard from "./pages/Dashboard/CandidateDashboard";
+import RecruiterDashboard from "./pages/Dashboard/RecruiterDashboard";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import FeaturesPage from "./pages/FeaturesPage";
 import JobsPage from "./pages/JobsPage";
 import JobDetailsPage from "./pages/JobDetailsPage";
-import ProfilePage from "./pages/ProfilePage";
+import CandidateProfile from "./pages/Profile/CandidateProfile";
+import CompanyProfile from "./pages/Profile/CompanyProfile";
+import ProtectedRoute from "./components/ProtectedRoute";
+import RoleProtectedRoute from "./components/RoleProtectedRoute";
+import PublicOnlyRoute from "./components/PublicOnlyRoute";
+import PostJob from "./pages/PostJob";
+import Settings from "./pages/Settings";
+import Error404 from "./pages/Error404";
+import Forbidden from "./pages/Forbidden";
+import MyApplications from "./pages/applications/MyApplications";
+import ApplicationsForJob from "./pages/applications/ApplicationsForJob";
+import ApplyJob from "./pages/applications/ApplyJob";
+import OAuthCallbackPage from './pages/OAuthCallbackPage.jsx';
+import ProtectedAppLayout from "./components/ProtectedAppLayout";
+import { useAuth } from "./redux/hooks/useAuth.js";
+import { useEffect } from "react";
 
 // Layout component that includes the navbar
 const Layout = () => {
+  const { getCurrentUser } = useAuth();
+  // Call once on mount to hydrate auth state
+  useEffect(() => {
+    getCurrentUser();
+    // Intentionally no dependencies to avoid repeated calls
+  }, []);
+
   return (
-    <div className="min-h-screen transition-colors duration-200">
+    <div className="min-h-screen transition-colors duration-200 flex flex-col">
       <Navbar />
-      <MessageDisplay />
-      <Outlet />
+      <div className="flex-1">
+        <Outlet />
+      </div>
+      <Footer />
     </div>
   );
 };
@@ -32,31 +59,147 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <LandingPage />,
+        element: (
+          <PublicOnlyRoute>
+            <HomePage />
+          </PublicOnlyRoute>
+        ),
+      },
+      
+      {
+        path: "login/student",
+        element: (
+          <PublicOnlyRoute>
+            <LoginStudent />
+          </PublicOnlyRoute>
+        ),
       },
       {
-        path: "login",
-        element: <LoginPage />,
+        path: "login/recruitor",
+        element: (
+          <PublicOnlyRoute>
+            <LoginRecruitor />
+          </PublicOnlyRoute>
+        ),
       },
       {
-        path: "signup",
-        element: <SignupPage />,
+        path: "signup/student",
+        element: (
+          <PublicOnlyRoute>
+            <SignupStudent />
+          </PublicOnlyRoute>
+        ),
       },
       {
-        path: "dashboard",
-        element: <Dashboard />,
+        path: "signup/recruitor",
+        element: (
+          <PublicOnlyRoute>
+            <SignupRecruitor />
+          </PublicOnlyRoute>
+        ),
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <ProtectedAppLayout />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            path: "candidate-dashboard",
+            element: (
+              <RoleProtectedRoute allowedRoles={["student"]}>
+                <CandidateDashboard />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "recruitor-dashboard",
+            element: (
+              <RoleProtectedRoute allowedRoles={["recruitor"]}>
+                <RecruiterDashboard />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "candidate-profile",
+            element: (
+              <RoleProtectedRoute allowedRoles={["student"]}>
+                <CandidateProfile />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "company-profile",
+            element: (
+              <RoleProtectedRoute allowedRoles={["recruitor"]}>
+                <CompanyProfile />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "post-job",
+            element: (
+              <RoleProtectedRoute allowedRoles={["recruitor"]}>
+                <PostJob />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "settings",
+            element: (
+              <Settings />
+            ),
+          },
+          {
+            path: "my-applications",
+            element: (
+              <RoleProtectedRoute allowedRoles={["student"]}>
+                <MyApplications />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "apply/:jobId",
+            element: (
+              <RoleProtectedRoute allowedRoles={["student"]}>
+                <ApplyJob />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "applications-for-job",
+            element: (
+              <RoleProtectedRoute allowedRoles={["recruitor"]}>
+                <ApplicationsForJob />
+              </RoleProtectedRoute>
+            ),
+          },
+        ],
       },
       {
         path: "about",
-        element: <AboutPage />,
+        element: (
+          <PublicOnlyRoute>
+            <AboutPage />
+          </PublicOnlyRoute>
+        ),
       },
       {
         path: "contact",
-        element: <ContactPage />,
+        element: (
+          <PublicOnlyRoute>
+            <ContactPage />
+          </PublicOnlyRoute>
+        ),
       },
       {
         path: "features",
-        element: <FeaturesPage />,
+        element: (
+          <PublicOnlyRoute>
+            <FeaturesPage />
+          </PublicOnlyRoute>
+        ),
       },
       {
         path: "jobs",
@@ -67,20 +210,18 @@ const router = createBrowserRouter([
         element: <JobDetailsPage />,
       },
       {
-        path: "profile",
-        element: <ProfilePage />,
+        path: "forbidden",
+        element: <Forbidden />,
       },
       {
-        path: "companies",
-        element: (
-          <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Companies Page - Coming Soon
-            </h1>
-          </div>
-        ),
+        path: "/oauth/callback",
+        element: <OAuthCallbackPage />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Error404 />,
   },
 ]);
 

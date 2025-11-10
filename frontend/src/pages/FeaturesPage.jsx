@@ -156,10 +156,10 @@ const FeaturesPage = () => {
             Join HireNexa today and take advantage of all these powerful features to advance your career.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-[#34aeeb] hover:bg-gray-100 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg">
+            <button className="bg-white text-[#34aeeb] hover:bg-gray-100 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg cursor-pointer">
               Get Started Free
             </button>
-            <button className="border-2 border-white text-white hover:bg-white hover:text-[#34aeeb] px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200">
+            <button className="border-2 border-white text-white hover:bg-white hover:text-[#34aeeb] px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 cursor-pointer">
               Learn More
             </button>
           </div>

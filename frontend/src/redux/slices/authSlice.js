@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Create axios instance
 const axiosInstance = axios.create({
@@ -50,7 +50,7 @@ export const getCurrentUser = createAsyncThunk(
   "auth/getCurrentUser",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/profile");
+      const response = await axiosInstance.get("/auth/me");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to fetch user");

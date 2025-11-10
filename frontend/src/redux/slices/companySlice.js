@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -25,7 +25,7 @@ export const getCompany = createAsyncThunk(
   "company/getCompany",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/company/get");
+      const response = await axiosInstance.get("/company/getByUser");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to fetch company");
@@ -37,7 +37,7 @@ export const getCompanyById = createAsyncThunk(
   "company/getCompanyById",
   async (companyId, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/company/${companyId}`);
+      const response = await axiosInstance.get(`/company/get-by-id/${companyId}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to fetch company by ID");
@@ -49,7 +49,7 @@ export const updateCompany = createAsyncThunk(
   "company/updateCompany",
   async ({ companyId, companyData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/company/${companyId}`, companyData);
+      const response = await axiosInstance.patch(`/company/update/${companyId}`, companyData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to update company");
@@ -64,7 +64,7 @@ export const updateCompanyLogo = createAsyncThunk(
       const formData = new FormData();
       formData.append("logo", logoFile);
       
-      const response = await axiosInstance.put(`/company/${companyId}/logo`, formData, {
+      const response = await axiosInstance.patch(`/company/logo/update/${companyId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -80,7 +80,7 @@ export const deleteCompany = createAsyncThunk(
   "company/deleteCompany",
   async (companyId, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/company/${companyId}`);
+      await axiosInstance.post(`/company/delete/${companyId}`);
       return companyId;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to delete company");
