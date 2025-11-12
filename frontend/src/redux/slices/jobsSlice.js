@@ -60,6 +60,30 @@ export const fetchAdminJobs = createAsyncThunk(
   }
 );
 
+export const updateJob = createAsyncThunk(
+  "jobs/updateJob",
+  async ({ jobId, jobData }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch(`/job/update/${jobId}`, jobData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error?.message || "Failed to update job");
+    }
+  }
+);
+
+export const deleteJob = createAsyncThunk(
+  "jobs/deleteJob",
+  async (jobId, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(`/job/delete/${jobId}`);
+      return { ...response.data, jobId };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error?.message || "Failed to delete job");
+    }
+  }
+);
+
 
 
 // Initial State
@@ -176,6 +200,50 @@ const jobsSlice = createSlice({
         state.adminJobs = action.payload.jobs;
       })
       .addCase(fetchAdminJobs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Update Job
+    builder
+      .addCase(updateJob.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(updateJob.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedJob = action.payload.job;
+        state.jobs = state.jobs.map(job => job._id === updatedJob._id ? updatedJob : job);
+        state.adminJobs = state.adminJobs.map(job => job._id === updatedJob._id ? updatedJob : job);
+        if (state.currentJob?._id === updatedJob._id) {
+          state.currentJob = updatedJob;
+        }
+        state.message = action.payload.message || "Job updated successfully";
+      })
+      .addCase(updateJob.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Delete Job
+    builder
+      .addCase(deleteJob.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(deleteJob.fulfilled, (state, action) => {
+        state.loading = false;
+        const jobId = action.payload.jobId;
+        state.jobs = state.jobs.filter(job => job._id !== jobId);
+        state.adminJobs = state.adminJobs.filter(job => job._id !== jobId);
+        if (state.currentJob?._id === jobId) {
+          state.currentJob = null;
+        }
+        state.message = action.payload.message || "Job deleted successfully";
+      })
+      .addCase(deleteJob.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

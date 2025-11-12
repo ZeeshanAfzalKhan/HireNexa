@@ -1,9 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useCallback } from "react";
 import { 
   fetchAllJobs,
   fetchJobById,
   postJob,
   fetchAdminJobs,
+  updateJob,
+  deleteJob,
   setJobs,
   setCurrentJob,
   setFilters,
@@ -32,14 +35,16 @@ export const useJobs = () => {
   const totalPages = useSelector((state) => state.jobs.totalPages);
   const currentPage = useSelector((state) => state.jobs.currentPage);
 
-  const handleFetchAllJobs = () => dispatch(fetchAllJobs());
-  const handleFetchJobById = (jobId) => dispatch(fetchJobById(jobId));
-  const handlePostJob = (jobData) => dispatch(postJob(jobData));
-  const handleFetchAdminJobs = () => dispatch(fetchAdminJobs());
-  const handleSetJobs = (jobs) => dispatch(setJobs(jobs));
-  const handleSetCurrentJob = (job) => dispatch(setCurrentJob(job));
-  const handleSetFilters = (filters) => dispatch(setFilters(filters));
-  const handleClearFilters = () => dispatch(clearFilters());
+  const handleFetchAllJobs = useCallback(() => dispatch(fetchAllJobs()), [dispatch]);
+  const handleFetchJobById = useCallback((jobId) => dispatch(fetchJobById(jobId)), [dispatch]);
+  const handlePostJob = useCallback((jobData) => dispatch(postJob(jobData)), [dispatch]);
+  const handleFetchAdminJobs = useCallback(() => dispatch(fetchAdminJobs()), [dispatch]);
+  const handleUpdateJob = useCallback((jobId, jobData) => dispatch(updateJob({ jobId, jobData })), [dispatch]);
+  const handleDeleteJob = useCallback((jobId) => dispatch(deleteJob(jobId)), [dispatch]);
+  const handleSetJobs = useCallback((jobs) => dispatch(setJobs(jobs)), [dispatch]);
+  const handleSetCurrentJob = useCallback((job) => dispatch(setCurrentJob(job)), [dispatch]);
+  const handleSetFilters = useCallback((filters) => dispatch(setFilters(filters)), [dispatch]);
+  const handleClearFilters = useCallback(() => dispatch(clearFilters()), [dispatch]);
 
   return {
     jobs,
@@ -56,6 +61,8 @@ export const useJobs = () => {
     fetchJobById: handleFetchJobById,
     postJob: handlePostJob,
     fetchAdminJobs: handleFetchAdminJobs,
+    updateJob: handleUpdateJob,
+    deleteJob: handleDeleteJob,
     setJobs: handleSetJobs,
     setCurrentJob: handleSetCurrentJob,
     setFilters: handleSetFilters,

@@ -28,7 +28,7 @@ const CompanyProfile = () => {
 
   useEffect(() => {
     dispatch(getCompany());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (company) {

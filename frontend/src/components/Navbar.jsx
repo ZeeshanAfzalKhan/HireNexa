@@ -37,7 +37,7 @@ const Navbar = () => {
     { name: "Company", path: "/company-profile" },
     { name: "Dashboard", path: "/recruitor-dashboard" },
     { name: "Post Job", path: "/post-job" },
-    { name: "Applications", path: "/applications-for-job" },
+    { name: "My Jobs", path: "/my-posted-jobs" },
     { name: "Settings", path: "/settings" },
   ];
 

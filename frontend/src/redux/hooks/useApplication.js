@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useCallback } from "react";
 import { 
   applyToJob,
   getAppliedJobs,
@@ -21,10 +22,10 @@ export const useApplication = () => {
   const error = useSelector(selectApplicationError);
   const message = useSelector(selectApplicationMessage);
 
-  const handleApplyToJob = (jobId, applicationData) => dispatch(applyToJob({ jobId, applicationData }));
-  const handleGetAppliedJobs = () => dispatch(getAppliedJobs());
-  const handleGetApplications = (jobId) => dispatch(getApplications(jobId));
-  const handleUpdateApplicationStatus = (applicationId, status) => dispatch(updateApplicationStatus({ applicationId, status }));
+  const handleApplyToJob = useCallback((jobId, applicationData) => dispatch(applyToJob({ jobId, applicationData })), [dispatch]);
+  const handleGetAppliedJobs = useCallback(() => dispatch(getAppliedJobs()), [dispatch]);
+  const handleGetApplications = useCallback((jobId) => dispatch(getApplications(jobId)), [dispatch]);
+  const handleUpdateApplicationStatus = useCallback((applicationId, status) => dispatch(updateApplicationStatus({ applicationId, status })), [dispatch]);
 
   return {
     applications,

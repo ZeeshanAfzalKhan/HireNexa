@@ -13,13 +13,13 @@ const Sidebar = () => {
     if (isAuthenticated && !user) {
       getCurrentUser();
     }
-  }, [isAuthenticated, user, getCurrentUser]);
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     if (isAuthenticated && !profile) {
       getProfile();
     }
-  }, [isAuthenticated, profile, getProfile]);
+  }, [isAuthenticated, profile]);
 
   // Sync content margin with Sidebar width on md+ via CSS variable
   useEffect(() => {
@@ -55,7 +55,7 @@ const Sidebar = () => {
         { name: "Dashboard", path: "/recruitor-dashboard", icon: "📊" },
         { name: "Company Profile", path: "/company-profile", icon: "👤" },
         { name: "Post Job", path: "/post-job", icon: "📝" },
-        { name: "Applications", path: "/applications-for-job", icon: "📋" },
+        { name: "My Jobs", path: "/my-posted-jobs", icon: "📋" },
         { name: "Settings", path: "/settings", icon: "⚙️" },
       ];
     }

@@ -42,7 +42,11 @@ export const postJob = async (req, res) => {
       "position",
     ];
 
-    const missingFields = requiredFields.filter((key) => !req.body[key]);
+    const missingFields = requiredFields.filter((key) => {
+      const value = req.body[key];
+      return value === undefined || value === null || value === "" || 
+             (Array.isArray(value) && value.length === 0);
+    });
 
     if (missingFields.length > 0) {
       return res.status(400).json({
@@ -81,7 +85,7 @@ export const postJob = async (req, res) => {
         },
       });
     } else if (
-      req.body.skillRequired.length < 2 ||
+      req.body.skillRequired.length < 1 ||
       req.body.skillRequired.length > 20
     ) {
       return res.status(400).json({
@@ -126,6 +130,14 @@ export const postJob = async (req, res) => {
         error: {
           code: "INVALID_EXPERIENCE_FORMAT",
           message: "Experience must be a number.",
+        },
+      });
+    } else if(experience < 0 || experience > 50){
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: "INVALID_EXPERIENCE_VALUE",
+          message: "Experience must be between 0 and 50 years.",
         },
       });
     } else if(!validator.isLength(location, { min: 10, max: 500 })){
@@ -321,22 +333,124 @@ export const getAdminJobs = async (req, res) => {
         });
     }
 
-    const jobs = await Job.find({ createdBy: user._id });
+    const jobs = await Job.find({ createdBy: user._id }).sort({ createdAt: -1 });
 
-    if (!jobs) {
-      return res.status(404).json({
+    return res.status(200).json({
+      message: jobs.length > 0 ? "Jobs fetched successfully." : "No jobs found.",
+      jobs,
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
+    });
+  }
+};
+
+export const updateJob = async (req, res) => {
+  try {
+    const user = req.user;
+    const jobId = req.params.id;
+
+    if (user.role !== "recruitor") {
+      return res.status(401).json({
         success: false,
         error: {
-          code: "NO_JOBS_FOUND",
-          message: "No jobs found.",
+          code: "UNAUTHORIZED_ACCESS",
+          message: "Unauthorized access",
         },
       });
     }
 
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: "JOB_NOT_FOUND",
+          message: "Job not found",
+        },
+      });
+    }
+
+    if (!job.createdBy.equals(user._id)) {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "You can only update jobs you created",
+        },
+      });
+    }
+
+    const updatedJob = await Job.findByIdAndUpdate(jobId, req.body, {
+      new: true,
+      runValidators: true,
+    }).populate("company");
+
     return res.status(200).json({
-      message: "Jobs fetched successfully.",
-      jobs,
       success: true,
+      message: "Job updated successfully",
+      job: updatedJob,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
+    });
+  }
+};
+
+export const deleteJob = async (req, res) => {
+  try {
+    const user = req.user;
+    const jobId = req.params.id;
+
+    if (user.role !== "recruitor") {
+      return res.status(401).json({
+        success: false,
+        error: {
+          code: "UNAUTHORIZED_ACCESS",
+          message: "Unauthorized access",
+        },
+      });
+    }
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: "JOB_NOT_FOUND",
+          message: "Job not found",
+        },
+      });
+    }
+
+    if (!job.createdBy.equals(user._id)) {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "You can only delete jobs you created",
+        },
+      });
+    }
+
+    await Job.findByIdAndDelete(jobId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Job deleted successfully",
     });
   } catch (err) {
     console.log(err);

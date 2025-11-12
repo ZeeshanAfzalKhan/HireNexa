@@ -10,8 +10,8 @@ const PublicOnlyRoute = ({ children }) => {
   if (isAuthenticated) {
     const role = user?.role;
     const redirectPath =
-      role === "recruiter"
-        ? "/recruiter-dashboard"
+      role === "recruitor"
+        ? "/recruitor-dashboard"
         : role === "student"
         ? "/candidate-dashboard"
         : "/";

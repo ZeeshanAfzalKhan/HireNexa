@@ -26,21 +26,16 @@ import Forbidden from "./pages/Forbidden";
 import MyApplications from "./pages/applications/MyApplications";
 import ApplicationsForJob from "./pages/applications/ApplicationsForJob";
 import ApplyJob from "./pages/applications/ApplyJob";
+import MyPostedJobs from "./pages/MyPostedJobs";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage.jsx";
 import ProtectedAppLayout from "./components/ProtectedAppLayout";
-import { useAuth } from "./redux/hooks/useAuth.js";
-import { useEffect } from "react";
+
 import { Toaster } from "react-hot-toast";
 import { useToastNotifications } from "./hooks/useToastNotifications";
 
 // Layout component that includes the navbar
 const Layout = () => {
-  const { getCurrentUser } = useAuth();
   useToastNotifications();
-  
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
 
   return (
     <div className="min-h-screen transition-colors duration-200 flex flex-col">
@@ -169,7 +164,15 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: "applications-for-job",
+            path: "my-posted-jobs",
+            element: (
+              <RoleProtectedRoute allowedRoles={["recruitor"]}>
+                <MyPostedJobs />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "applications/:jobId",
             element: (
               <RoleProtectedRoute allowedRoles={["recruitor"]}>
                 <ApplicationsForJob />

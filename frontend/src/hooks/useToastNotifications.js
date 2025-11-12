@@ -55,7 +55,7 @@ export const useToastNotifications = () => {
       toast.success(authMessage);
       dispatch(clearAuthMessage());
     }
-  }, [authError, authMessage, dispatch]);
+  }, [authError, authMessage]);
 
   useEffect(() => {
     if (jobsError) {
@@ -66,7 +66,7 @@ export const useToastNotifications = () => {
       toast.success(jobsMessage);
       dispatch(clearJobsMessage());
     }
-  }, [jobsError, jobsMessage, dispatch]);
+  }, [jobsError, jobsMessage]);
 
   useEffect(() => {
     if (applicationError) {
@@ -77,7 +77,7 @@ export const useToastNotifications = () => {
       toast.success(applicationMessage);
       dispatch(clearApplicationMessage());
     }
-  }, [applicationError, applicationMessage, dispatch]);
+  }, [applicationError, applicationMessage]);
 
   useEffect(() => {
     if (profileError) {
@@ -88,7 +88,7 @@ export const useToastNotifications = () => {
       toast.success(profileMessage);
       dispatch(clearProfileMessage());
     }
-  }, [profileError, profileMessage, dispatch]);
+  }, [profileError, profileMessage]);
 
   useEffect(() => {
     if (companyError) {
@@ -99,5 +99,5 @@ export const useToastNotifications = () => {
       toast.success(companyMessage);
       dispatch(clearCompanyMessage());
     }
-  }, [companyError, companyMessage, dispatch]);
+  }, [companyError, companyMessage]);
 };
