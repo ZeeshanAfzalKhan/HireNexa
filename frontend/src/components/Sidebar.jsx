@@ -89,7 +89,7 @@ const Sidebar = () => {
             key={item.name}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center p-3 rounded-lg transition-colors duration-200 ${
+              `flex items-center rounded-lg transition-colors duration-200 ${isCollapsed ? "p-2 justify-center" : "p-3"} ${
                 isActive
                   ? "bg-[#34aeeb] text-white"
                   : "text-gray-300 hover:bg-gray-800 hover:text-[#34aeeb]"
