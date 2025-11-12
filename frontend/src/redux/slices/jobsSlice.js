@@ -60,6 +60,30 @@ export const fetchAdminJobs = createAsyncThunk(
   }
 );
 
+export const updateJob = createAsyncThunk(
+  "jobs/updateJob",
+  async ({ jobId, jobData }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch(`/job/update/${jobId}`, jobData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error?.message || "Failed to update job");
+    }
+  }
+);
+
+export const toggleJobStatus = createAsyncThunk(
+  "jobs/toggleJobStatus",
+  async (jobId, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch(`/job/toggle-status/${jobId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error?.message || "Failed to toggle job status");
+    }
+  }
+);
+
 
 
 
@@ -184,6 +208,45 @@ const jobsSlice = createSlice({
         state.adminCurrentPage = action.payload.currentPage || 1;
       })
       .addCase(fetchAdminJobs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Update Job
+    builder
+      .addCase(updateJob.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateJob.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedJob = action.payload.job;
+        state.adminJobs = state.adminJobs.map(job => 
+          job._id === updatedJob._id ? updatedJob : job
+        );
+        state.currentJob = updatedJob;
+        state.message = action.payload.message;
+      })
+      .addCase(updateJob.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Toggle Job Status
+    builder
+      .addCase(toggleJobStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(toggleJobStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedJob = action.payload.job;
+        state.adminJobs = state.adminJobs.map(job => 
+          job._id === updatedJob._id ? updatedJob : job
+        );
+        state.message = action.payload.message;
+      })
+      .addCase(toggleJobStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

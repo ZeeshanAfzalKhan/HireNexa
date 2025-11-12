@@ -4,7 +4,7 @@ import { useJobs } from '../redux/hooks/useJobs';
 
 const MyPostedJobs = () => {
   const navigate = useNavigate();
-  const { adminJobs, loading, error, fetchAdminJobs, adminTotalPages, adminCurrentPage } = useJobs();
+  const { adminJobs, loading, error, fetchAdminJobs, adminTotalPages, adminCurrentPage, toggleJobStatus } = useJobs();
 
   useEffect(() => {
     fetchAdminJobs({ page: 1, limit: 10 });
@@ -12,6 +12,11 @@ const MyPostedJobs = () => {
 
   const handlePageChange = (newPage) => {
     fetchAdminJobs({ page: newPage, limit: 10 });
+  };
+
+  const handleToggleStatus = async (jobId) => {
+    await toggleJobStatus(jobId);
+    fetchAdminJobs({ page: adminCurrentPage, limit: 10 });
   };
 
   const handleViewApplications = (jobId) => {
@@ -97,13 +102,35 @@ const MyPostedJobs = () => {
                     <span>{job.jobType}</span>
                     <span>•</span>
                     <span>{job.experience} years exp</span>
+                    <span>•</span>
+                    <span className={job.isClosed ? 'text-red-400' : 'text-green-400'}>
+                      {job.isClosed ? 'Closed' : 'Open'}
+                    </span>
                   </div>
-                  <button
-                    onClick={() => handleViewApplications(job._id)}
-                    className="px-4 py-2 bg-[#34aeeb] text-white rounded-lg hover:bg-[#2a8bc7] transition cursor-pointer"
-                  >
-                    View Applications
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleViewApplications(job._id)}
+                      className="px-4 py-2 bg-[#34aeeb] text-white rounded-lg hover:bg-[#2a8bc7] transition cursor-pointer"
+                    >
+                      View Applications
+                    </button>
+                    <button
+                      onClick={() => navigate(`/update-job/${job._id}`)}
+                      className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition cursor-pointer"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleToggleStatus(job._id)}
+                      className={`px-4 py-2 rounded-lg transition cursor-pointer ${
+                        job.isClosed 
+                          ? 'bg-green-600 hover:bg-green-700 text-white' 
+                          : 'bg-red-600 hover:bg-red-700 text-white'
+                      }`}
+                    >
+                      {job.isClosed ? 'Reopen' : 'Close'}
+                    </button>
+                  </div>
                 </div>
               </div>
               ))}

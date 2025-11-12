@@ -5,6 +5,8 @@ import {
   fetchJobById,
   postJob,
   fetchAdminJobs,
+  updateJob,
+  toggleJobStatus,
   setJobs,
   setCurrentJob,
   setFilters,
@@ -40,6 +42,8 @@ export const useJobs = () => {
   const handleFetchJobById = useCallback((jobId) => dispatch(fetchJobById(jobId)), [dispatch]);
   const handlePostJob = useCallback((jobData) => dispatch(postJob(jobData)), [dispatch]);
   const handleFetchAdminJobs = useCallback((params) => dispatch(fetchAdminJobs(params)), [dispatch]);
+  const handleUpdateJob = useCallback((jobId, jobData) => dispatch(updateJob({ jobId, jobData })), [dispatch]);
+  const handleToggleJobStatus = useCallback((jobId) => dispatch(toggleJobStatus(jobId)), [dispatch]);
 
   const handleSetJobs = useCallback((jobs) => dispatch(setJobs(jobs)), [dispatch]);
   const handleSetCurrentJob = useCallback((job) => dispatch(setCurrentJob(job)), [dispatch]);
@@ -64,6 +68,8 @@ export const useJobs = () => {
     fetchJobById: handleFetchJobById,
     postJob: handlePostJob,
     fetchAdminJobs: handleFetchAdminJobs,
+    updateJob: handleUpdateJob,
+    toggleJobStatus: handleToggleJobStatus,
 
     setJobs: handleSetJobs,
     setCurrentJob: handleSetCurrentJob,

@@ -27,6 +27,7 @@ import MyApplications from "./pages/applications/MyApplications";
 import ApplicationsForJob from "./pages/applications/ApplicationsForJob";
 import ApplyJob from "./pages/applications/ApplyJob";
 import MyPostedJobs from "./pages/MyPostedJobs";
+import UpdateJob from "./pages/UpdateJob";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage.jsx";
 import ProtectedAppLayout from "./components/ProtectedAppLayout";
 
@@ -176,6 +177,14 @@ const router = createBrowserRouter([
             element: (
               <RoleProtectedRoute allowedRoles={["recruitor"]}>
                 <ApplicationsForJob />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: "update-job/:id",
+            element: (
+              <RoleProtectedRoute allowedRoles={["recruitor"]}>
+                <UpdateJob />
               </RoleProtectedRoute>
             ),
           },
