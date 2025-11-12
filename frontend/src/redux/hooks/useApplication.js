@@ -23,7 +23,7 @@ export const useApplication = () => {
   const message = useSelector(selectApplicationMessage);
 
   const handleApplyToJob = useCallback((jobId, applicationData) => dispatch(applyToJob({ jobId, applicationData })), [dispatch]);
-  const handleGetAppliedJobs = useCallback(() => dispatch(getAppliedJobs()), [dispatch]);
+  const handleGetAppliedJobs = useCallback((params) => dispatch(getAppliedJobs(params)), [dispatch]);
   const handleGetApplications = useCallback((jobId) => dispatch(getApplications(jobId)), [dispatch]);
   const handleUpdateApplicationStatus = useCallback((applicationId, status) => dispatch(updateApplicationStatus({ applicationId, status })), [dispatch]);
 

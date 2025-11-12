@@ -5,8 +5,6 @@ import {
   fetchJobById,
   postJob,
   fetchAdminJobs,
-  updateJob,
-  deleteJob,
   setJobs,
   setCurrentJob,
   setFilters,
@@ -34,13 +32,15 @@ export const useJobs = () => {
   const totalJobs = useSelector((state) => state.jobs.totalJobs);
   const totalPages = useSelector((state) => state.jobs.totalPages);
   const currentPage = useSelector((state) => state.jobs.currentPage);
+  const adminTotalJobs = useSelector((state) => state.jobs.adminTotalJobs);
+  const adminTotalPages = useSelector((state) => state.jobs.adminTotalPages);
+  const adminCurrentPage = useSelector((state) => state.jobs.adminCurrentPage);
 
   const handleFetchAllJobs = useCallback(() => dispatch(fetchAllJobs()), [dispatch]);
   const handleFetchJobById = useCallback((jobId) => dispatch(fetchJobById(jobId)), [dispatch]);
   const handlePostJob = useCallback((jobData) => dispatch(postJob(jobData)), [dispatch]);
-  const handleFetchAdminJobs = useCallback(() => dispatch(fetchAdminJobs()), [dispatch]);
-  const handleUpdateJob = useCallback((jobId, jobData) => dispatch(updateJob({ jobId, jobData })), [dispatch]);
-  const handleDeleteJob = useCallback((jobId) => dispatch(deleteJob(jobId)), [dispatch]);
+  const handleFetchAdminJobs = useCallback((params) => dispatch(fetchAdminJobs(params)), [dispatch]);
+
   const handleSetJobs = useCallback((jobs) => dispatch(setJobs(jobs)), [dispatch]);
   const handleSetCurrentJob = useCallback((job) => dispatch(setCurrentJob(job)), [dispatch]);
   const handleSetFilters = useCallback((filters) => dispatch(setFilters(filters)), [dispatch]);
@@ -57,12 +57,14 @@ export const useJobs = () => {
     totalJobs,
     totalPages,
     currentPage,
+    adminTotalJobs,
+    adminTotalPages,
+    adminCurrentPage,
     fetchAllJobs: handleFetchAllJobs,
     fetchJobById: handleFetchJobById,
     postJob: handlePostJob,
     fetchAdminJobs: handleFetchAdminJobs,
-    updateJob: handleUpdateJob,
-    deleteJob: handleDeleteJob,
+
     setJobs: handleSetJobs,
     setCurrentJob: handleSetCurrentJob,
     setFilters: handleSetFilters,

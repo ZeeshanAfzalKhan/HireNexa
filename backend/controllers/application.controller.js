@@ -204,22 +204,34 @@ export const getApplications = async (req, res) => {
       });
     }
 
-    if (!user?.profile?.company?.equals(jobId?.company)) {
-      return res.status(401).json({
-        success: false,
-        error: {
-          code: "UNAUTHORIZED_ACCESS",
-          message: "Unauthorized access",
-        },
-      });
-    }
-
     if (!jobId) {
       return res.status(400).json({
         success: false,
         error: {
           code: "MISSING_JOB_ID",
           message: "Job ID is required",
+        },
+      });
+    }
+
+    // Fetch the job to verify company ownership
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: "JOB_NOT_FOUND",
+          message: "Job not found",
+        },
+      });
+    }
+
+    if (!user?.profile?.company?.equals(job.company)) {
+      return res.status(401).json({
+        success: false,
+        error: {
+          code: "UNAUTHORIZED_ACCESS",
+          message: "Unauthorized access",
         },
       });
     }
@@ -330,11 +342,12 @@ export const updateStatus = async (req, res) => {
 
     // Update status
     application.status = status.toLowerCase();
-    await application.save();
+    const updatedApplication = await application.save();
 
     return res.status(200).json({
       message: "Status updated successfully",
       success: true,
+      application: updatedApplication,
     });
   } catch (err) {
     console.log(err);

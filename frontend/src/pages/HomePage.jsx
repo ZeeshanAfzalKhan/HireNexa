@@ -17,19 +17,19 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/signup/student"
-              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg"
+              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg cursor-pointer"
             >
               Get Started Free (Student)
             </Link>
             <Link
               to="/signup/recruitor"
-              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg"
+              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg cursor-pointer"
             >
               Recruiter Signup
             </Link>
             <Link
               to="/jobs"
-              className="border-2 border-gray-100 text-gray-100 hover:bg-gray-100 hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200"
+              className="border-2 border-gray-100 text-gray-100 hover:bg-gray-100 hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 cursor-pointer"
             >
               Browse Jobs
             </Link>
@@ -126,19 +126,19 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/signup/student"
-              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg"
+              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg cursor-pointer"
             >
               Student Signup
             </Link>
             <Link
               to="/signup/recruitor"
-              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg"
+              className="bg-gray-100 text-gray-900 hover:bg-gray-300 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-lg cursor-pointer"
             >
               Recruiter Signup
             </Link>
             <Link
               to="/about"
-              className="border-2 border-gray-100 text-gray-100 hover:bg-gray-100 hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200"
+              className="border-2 border-gray-100 text-gray-100 hover:bg-gray-100 hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 cursor-pointer"
             >
               Learn More
             </Link>

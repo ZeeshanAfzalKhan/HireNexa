@@ -333,11 +333,24 @@ export const getAdminJobs = async (req, res) => {
         });
     }
 
-    const jobs = await Job.find({ createdBy: user._id }).sort({ createdAt: -1 });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const jobs = await Job.find({ createdBy: user._id })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalJobs = await Job.countDocuments({ createdBy: user._id });
+    const totalPages = Math.ceil(totalJobs / limit);
 
     return res.status(200).json({
       message: jobs.length > 0 ? "Jobs fetched successfully." : "No jobs found.",
       jobs,
+      currentPage: page,
+      totalPages: totalPages,
+      totalJobs: totalJobs,
       success: true,
     });
   } catch (err) {
@@ -352,114 +365,4 @@ export const getAdminJobs = async (req, res) => {
   }
 };
 
-export const updateJob = async (req, res) => {
-  try {
-    const user = req.user;
-    const jobId = req.params.id;
 
-    if (user.role !== "recruitor") {
-      return res.status(401).json({
-        success: false,
-        error: {
-          code: "UNAUTHORIZED_ACCESS",
-          message: "Unauthorized access",
-        },
-      });
-    }
-
-    const job = await Job.findById(jobId);
-    if (!job) {
-      return res.status(404).json({
-        success: false,
-        error: {
-          code: "JOB_NOT_FOUND",
-          message: "Job not found",
-        },
-      });
-    }
-
-    if (!job.createdBy.equals(user._id)) {
-      return res.status(403).json({
-        success: false,
-        error: {
-          code: "FORBIDDEN",
-          message: "You can only update jobs you created",
-        },
-      });
-    }
-
-    const updatedJob = await Job.findByIdAndUpdate(jobId, req.body, {
-      new: true,
-      runValidators: true,
-    }).populate("company");
-
-    return res.status(200).json({
-      success: true,
-      message: "Job updated successfully",
-      job: updatedJob,
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      success: false,
-      error: {
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Something went wrong",
-      },
-    });
-  }
-};
-
-export const deleteJob = async (req, res) => {
-  try {
-    const user = req.user;
-    const jobId = req.params.id;
-
-    if (user.role !== "recruitor") {
-      return res.status(401).json({
-        success: false,
-        error: {
-          code: "UNAUTHORIZED_ACCESS",
-          message: "Unauthorized access",
-        },
-      });
-    }
-
-    const job = await Job.findById(jobId);
-    if (!job) {
-      return res.status(404).json({
-        success: false,
-        error: {
-          code: "JOB_NOT_FOUND",
-          message: "Job not found",
-        },
-      });
-    }
-
-    if (!job.createdBy.equals(user._id)) {
-      return res.status(403).json({
-        success: false,
-        error: {
-          code: "FORBIDDEN",
-          message: "You can only delete jobs you created",
-        },
-      });
-    }
-
-    await Job.findByIdAndDelete(jobId);
-
-    return res.status(200).json({
-      success: true,
-      message: "Job deleted successfully",
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      success: false,
-      error: {
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Something went wrong",
-      },
-    });
-  }
-};

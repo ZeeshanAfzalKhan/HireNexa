@@ -39,9 +39,9 @@ export const applyToJob = createAsyncThunk(
 
 export const getAppliedJobs = createAsyncThunk(
   "application/getAppliedJobs",
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/application/get");
+      const response = await axiosInstance.get("/application/get", { params });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to fetch applied jobs");
@@ -80,6 +80,9 @@ const initialState = {
   loading: false,
   error: null,
   message: null,
+  totalApplications: 0,
+  totalPages: 0,
+  currentPage: 1,
 };
 
 // Application Slice
@@ -122,6 +125,9 @@ const applicationSlice = createSlice({
       .addCase(getAppliedJobs.fulfilled, (state, action) => {
         state.loading = false;
         state.appliedJobs = action.payload.applications;
+        state.totalApplications = action.payload.totalApplications || 0;
+        state.totalPages = action.payload.totalPages || 0;
+        state.currentPage = action.payload.currentPage || 1;
         state.message = action.payload.message || "Applied jobs loaded successfully";
       })
       .addCase(getAppliedJobs.rejected, (state, action) => {
@@ -156,12 +162,14 @@ const applicationSlice = createSlice({
       .addCase(updateApplicationStatus.fulfilled, (state, action) => {
         state.loading = false;
         const updatedApplication = action.payload.application;
-        state.applications = state.applications.map(app => 
-          app._id === updatedApplication._id ? updatedApplication : app
-        );
-        state.appliedJobs = state.appliedJobs.map(app => 
-          app._id === updatedApplication._id ? updatedApplication : app
-        );
+        if (updatedApplication) {
+          state.applications = state.applications.map(app => 
+            app._id === updatedApplication._id ? { ...app, status: updatedApplication.status } : app
+          );
+          state.appliedJobs = state.appliedJobs.map(app => 
+            app._id === updatedApplication._id ? { ...app, status: updatedApplication.status } : app
+          );
+        }
         state.message = action.payload.message || "Application status updated successfully";
       })
       .addCase(updateApplicationStatus.rejected, (state, action) => {

@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useJobs } from '../redux/hooks/useJobs';
 
 const MyPostedJobs = () => {
   const navigate = useNavigate();
-  const { adminJobs, loading, error, fetchAdminJobs } = useJobs();
+  const { adminJobs, loading, error, fetchAdminJobs, adminTotalPages, adminCurrentPage } = useJobs();
 
   useEffect(() => {
-    fetchAdminJobs();
-  }, []);
+    fetchAdminJobs({ page: 1, limit: 10 });
+  }, [fetchAdminJobs]);
+
+  const handlePageChange = (newPage) => {
+    fetchAdminJobs({ page: newPage, limit: 10 });
+  };
 
   const handleViewApplications = (jobId) => {
     navigate(`/applications/${jobId}`);
@@ -38,14 +42,15 @@ const MyPostedJobs = () => {
             <p className="text-gray-500 dark:text-gray-400 mb-4">No jobs posted yet</p>
             <button
               onClick={() => navigate('/post-job')}
-              className="px-6 py-2 bg-[#34aeeb] text-white rounded-lg hover:bg-[#2a8bc7]"
+              className="px-6 py-2 bg-[#34aeeb] text-white rounded-lg hover:bg-[#2a8bc7] cursor-pointer"
             >
               Post Your First Job
             </button>
           </div>
         ) : (
-          <div className="grid gap-6">
-            {adminJobs.map((job) => (
+          <>
+            <div className="grid gap-6">
+              {adminJobs.map((job) => (
               <div key={job._id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
@@ -95,14 +100,36 @@ const MyPostedJobs = () => {
                   </div>
                   <button
                     onClick={() => handleViewApplications(job._id)}
-                    className="px-4 py-2 bg-[#34aeeb] text-white rounded-lg hover:bg-[#2a8bc7] transition"
+                    className="px-4 py-2 bg-[#34aeeb] text-white rounded-lg hover:bg-[#2a8bc7] transition cursor-pointer"
                   >
                     View Applications
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+            {adminTotalPages > 1 && (
+              <div className="mt-8 flex justify-center items-center gap-2">
+                <button
+                  onClick={() => handlePageChange(adminCurrentPage - 1)}
+                  disabled={adminCurrentPage === 1}
+                  className="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  Previous
+                </button>
+                <span className="text-gray-300">
+                  Page {adminCurrentPage} of {adminTotalPages}
+                </span>
+                <button
+                  onClick={() => handlePageChange(adminCurrentPage + 1)}
+                  disabled={adminCurrentPage === adminTotalPages}
+                  className="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

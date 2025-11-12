@@ -6,17 +6,23 @@ const ApplicationsForJob = () => {
   const { jobId } = useParams();
   const { applications, loading, error, getApplications, updateApplicationStatus } = useApplication();
   const [statusFilter, setStatusFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     if (jobId) {
-      getApplications(jobId, statusFilter);
+      getApplications(jobId, { page: currentPage, limit: 10, status: statusFilter });
     }
-  }, [jobId, statusFilter]);
+  }, [jobId, currentPage, statusFilter]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter]);
 
   const handleStatusUpdate = async (applicationId, newStatus) => {
     await updateApplicationStatus(applicationId, newStatus);
     // Refresh applications after status update
-    getApplications(jobId, statusFilter);
+    getApplications(jobId);
   };
 
   const getStatusColor = (status) => {
@@ -131,14 +137,14 @@ const ApplicationsForJob = () => {
                           <div className="flex gap-2">
                             <button
                               onClick={() => handleStatusUpdate(application._id, 'accepted')}
-                              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 cursor-pointer"
                               disabled={loading}
                             >
                               Accept
                             </button>
                             <button
                               onClick={() => handleStatusUpdate(application._id, 'rejected')}
-                              className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                              className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
                               disabled={loading}
                             >
                               Reject
@@ -151,6 +157,27 @@ const ApplicationsForJob = () => {
                 </tbody>
               </table>
             </div>
+            {totalPages > 1 && (
+              <div className="mt-6 flex justify-center items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  Previous
+                </button>
+                <span className="text-gray-300">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
