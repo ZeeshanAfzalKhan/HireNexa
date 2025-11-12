@@ -77,6 +77,11 @@ const jobSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "Creator reference is required."],
     },
+
+    isClosed: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

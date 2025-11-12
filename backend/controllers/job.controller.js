@@ -253,6 +253,9 @@ export const getJobs = async (req, res) => {
 
     // Remove empty objects from $and
     query.$and = query.$and.filter(cond => Object.keys(cond).length > 0);
+    
+    // Add filter to exclude closed jobs
+    query.$and.push({ isClosed: { $ne: true } });
 
     // Fetch jobs
     const jobs = await Job.find(query)
@@ -352,6 +355,120 @@ export const getAdminJobs = async (req, res) => {
       totalPages: totalPages,
       totalJobs: totalJobs,
       success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
+    });
+  }
+};
+
+export const updateJob = async (req, res) => {
+  try {
+    const user = req.user;
+    const jobId = req.params.id;
+
+    if (user.role !== "recruitor") {
+      return res.status(401).json({
+        success: false,
+        error: {
+          code: "UNAUTHORIZED_ACCESS",
+          message: "Unauthorized access",
+        },
+      });
+    }
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: "JOB_NOT_FOUND",
+          message: "Job not found",
+        },
+      });
+    }
+
+    if (!job.createdBy.equals(user._id)) {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "You can only update jobs you created",
+        },
+      });
+    }
+
+    const updatedJob = await Job.findByIdAndUpdate(jobId, req.body, {
+      new: true,
+      runValidators: true,
+    }).populate("company");
+
+    return res.status(200).json({
+      success: true,
+      message: "Job updated successfully",
+      job: updatedJob,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
+    });
+  }
+};
+
+export const toggleJobStatus = async (req, res) => {
+  try {
+    const user = req.user;
+    const jobId = req.params.id;
+
+    if (user.role !== "recruitor") {
+      return res.status(401).json({
+        success: false,
+        error: {
+          code: "UNAUTHORIZED_ACCESS",
+          message: "Unauthorized access",
+        },
+      });
+    }
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: "JOB_NOT_FOUND",
+          message: "Job not found",
+        },
+      });
+    }
+
+    if (!job.createdBy.equals(user._id)) {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "You can only modify jobs you created",
+        },
+      });
+    }
+
+    job.isClosed = !job.isClosed;
+    await job.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Job ${job.isClosed ? 'closed' : 'reopened'} successfully`,
+      job,
     });
   } catch (err) {
     console.log(err);

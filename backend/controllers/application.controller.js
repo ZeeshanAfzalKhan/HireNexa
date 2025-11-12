@@ -31,6 +31,16 @@ export const applyJob = async (req, res) => {
       });
     }
 
+    if (job.isClosed) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: "JOB_CLOSED",
+          message: "This job is no longer accepting applications",
+        },
+      });
+    }
+
     // Check if user already applied
     const existingApplication = await Application.findOne({
       job: jobId,
