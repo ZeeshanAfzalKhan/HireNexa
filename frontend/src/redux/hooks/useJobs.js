@@ -4,8 +4,6 @@ import {
   fetchJobById,
   postJob,
   fetchAdminJobs,
-  updateJob,
-  deleteJob,
   setJobs,
   setCurrentJob,
   setFilters,
@@ -30,13 +28,14 @@ export const useJobs = () => {
   const error = useSelector(selectJobsError);
   const filters = useSelector(selectFilters);
   const message = useSelector(selectJobsMessage);
+  const totalJobs = useSelector((state) => state.jobs.totalJobs);
+  const totalPages = useSelector((state) => state.jobs.totalPages);
+  const currentPage = useSelector((state) => state.jobs.currentPage);
 
   const handleFetchAllJobs = () => dispatch(fetchAllJobs());
   const handleFetchJobById = (jobId) => dispatch(fetchJobById(jobId));
   const handlePostJob = (jobData) => dispatch(postJob(jobData));
   const handleFetchAdminJobs = () => dispatch(fetchAdminJobs());
-  const handleUpdateJob = (jobId, jobData) => dispatch(updateJob({ jobId, jobData }));
-  const handleDeleteJob = (jobId) => dispatch(deleteJob(jobId));
   const handleSetJobs = (jobs) => dispatch(setJobs(jobs));
   const handleSetCurrentJob = (job) => dispatch(setCurrentJob(job));
   const handleSetFilters = (filters) => dispatch(setFilters(filters));
@@ -50,12 +49,13 @@ export const useJobs = () => {
     error,
     filters,
     message,
+    totalJobs,
+    totalPages,
+    currentPage,
     fetchAllJobs: handleFetchAllJobs,
     fetchJobById: handleFetchJobById,
     postJob: handlePostJob,
     fetchAdminJobs: handleFetchAdminJobs,
-    updateJob: handleUpdateJob,
-    deleteJob: handleDeleteJob,
     setJobs: handleSetJobs,
     setCurrentJob: handleSetCurrentJob,
     setFilters: handleSetFilters,
