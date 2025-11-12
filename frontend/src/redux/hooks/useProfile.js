@@ -7,6 +7,8 @@ import {
   changePassword,
   uploadProfilePicture,
   uploadResume,
+  addSkills,
+  deleteSkill,
   setProfile,
   selectProfile,
   selectProfileLoading,
@@ -29,6 +31,8 @@ export const useProfile = () => {
   const handleChangePassword = useCallback((passwordData) => dispatch(changePassword(passwordData)), [dispatch]);
   const handleUploadProfilePicture = useCallback((profilePicture) => dispatch(uploadProfilePicture(profilePicture)), [dispatch]);
   const handleUploadResume = useCallback((resume) => dispatch(uploadResume(resume)), [dispatch]);
+  const handleAddSkills = useCallback((skills) => dispatch(addSkills(skills)), [dispatch]);
+  const handleDeleteSkill = useCallback((skill) => dispatch(deleteSkill(skill)), [dispatch]);
   const handleSetProfile = useCallback((profile) => dispatch(setProfile(profile)), [dispatch]);
 
   return {
@@ -42,6 +46,8 @@ export const useProfile = () => {
     changePassword: handleChangePassword,
     uploadProfilePicture: handleUploadProfilePicture,
     uploadResume: handleUploadResume,
+    addSkills: handleAddSkills,
+    deleteSkill: handleDeleteSkill,
     setProfile: handleSetProfile,
   };
 };

@@ -14,6 +14,8 @@ const CandidateProfile = () => {
     updateProfile,
     uploadProfilePicture,
     uploadResume,
+    addSkills,
+    deleteSkill,
   } = useProfile();
 
   const [form, setForm] = useState({
@@ -22,7 +24,12 @@ const CandidateProfile = () => {
     emailId: '',
     phoneNumber: '',
     bio: '',
+    skills: [],
+    linkedIn: '',
+    github: '',
+    website: '',
   });
+  const [skillInput, setSkillInput] = useState('');
   const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [resumeFile, setResumeFile] = useState(null);
   const [activeAction, setActiveAction] = useState(null); // 'save' | 'uploadPic' | 'uploadResume'
@@ -41,6 +48,10 @@ const CandidateProfile = () => {
         emailId: profile.emailId || '',
         phoneNumber: profile.phoneNumber || '',
         bio: profile.profile?.bio || '',
+        skills: profile.profile?.skills || [],
+        linkedIn: profile.profile?.socials?.linkedIn || '',
+        github: profile.profile?.socials?.github || '',
+        website: profile.profile?.socials?.website || '',
       });
     }
   }, [profile]);
@@ -77,8 +88,29 @@ const CandidateProfile = () => {
       firstName: form.firstName,
       lastName: form.lastName,
       phoneNumber: form.phoneNumber,
-      profile: { bio: form.bio },
+      profile: { 
+        bio: form.bio,
+        skills: form.skills,
+        socials: {
+          linkedIn: form.linkedIn,
+          github: form.github,
+          website: form.website,
+        }
+      },
     });
+  };
+
+  const addSkill = async (e) => {
+    if (e) e.preventDefault();
+    const trimmedSkill = skillInput.trim();
+    if (trimmedSkill && trimmedSkill.length >= 2 && trimmedSkill.length <= 50) {
+      await addSkills(trimmedSkill);
+      setSkillInput('');
+    }
+  };
+
+  const removeSkill = async (skillToRemove) => {
+    await deleteSkill(skillToRemove);
   };
 
   const handleProfilePictureChange = (e) => {
@@ -119,8 +151,20 @@ const CandidateProfile = () => {
         </div>
       )}
 
+      {/* Current Profile Picture */}
+      {profile?.profile?.profilePicture?.profilePictureURL && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4">Current Profile Picture</h2>
+          <img 
+            src={profile.profile.profilePicture.profilePictureURL} 
+            alt="Profile" 
+            className="w-32 h-32 rounded-full object-cover"
+          />
+        </div>
+      )}
+
       {/* Profile Form */}
-      <form onSubmit={handleSave} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
+      <form onSubmit={handleSave} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">First Name</label>
@@ -167,16 +211,105 @@ const CandidateProfile = () => {
               placeholder="1234567890"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Bio</label>
-            <textarea
-              name="bio"
-              value={form.bio}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"
-              rows={4}
-              placeholder="Short summary about your skills and experience"
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Bio</label>
+          <textarea
+            name="bio"
+            value={form.bio}
+            onChange={handleChange}
+            className="w-full border rounded-md px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"
+            rows={4}
+            placeholder="Short summary about your skills and experience"
+          />
+          <div className="flex items-center justify-between mt-1 text-xs">
+            <span className="text-gray-500">Maximum 200 characters</span>
+            <span className={form.bio.length > 500 ? "text-red-400" : "text-green-400"}>
+              {form.bio.length}/500 characters
+            </span>
+          </div>
+        </div>
+
+        {/* Skills Section */}
+        <div>
+          <label className="block text-sm font-medium mb-2">Skills</label>
+          <div className="flex gap-2 mb-2">
+            <input
+              type="text"
+              value={skillInput}
+              onChange={(e) => setSkillInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && addSkill(e)}
+              className="flex-1 border rounded-md px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"
+              placeholder="Add a skill"
+              maxLength={50}
             />
+            <button
+              type="button"
+              onClick={addSkill}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              Add
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {form.skills.map((skill, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm"
+              >
+                {skill}
+                <button
+                  type="button"
+                  onClick={() => removeSkill(skill)}
+                  className="text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100"
+                  disabled={loading}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">{form.skills.length}/30 skills</p>
+        </div>
+
+        {/* Social Links */}
+        <div>
+          <h3 className="text-lg font-medium mb-3">Social Links</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">LinkedIn</label>
+              <input
+                type="url"
+                name="linkedIn"
+                value={form.linkedIn}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"
+                placeholder="https://linkedin.com/in/username"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">GitHub</label>
+              <input
+                type="url"
+                name="github"
+                value={form.github}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"
+                placeholder="https://github.com/username"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Website</label>
+              <input
+                type="url"
+                name="website"
+                value={form.website}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 bg-white dark:bg-gray-700 dark:text-white"
+                placeholder="https://yourwebsite.com"
+              />
+            </div>
           </div>
         </div>
 
@@ -191,40 +324,26 @@ const CandidateProfile = () => {
         </div>
       </form>
 
-      {/* Uploads */}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Profile Picture</h2>
-          <input
-            ref={picInputRef}
-            id="profile-picture-upload"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleProfilePictureChange}
-          />
-          <div className="flex items-center gap-3">
-            <label
-              htmlFor="profile-picture-upload"
-              className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-            >
-              Choose File
-            </label>
-            <span className="text-sm text-gray-600 dark:text-gray-300">
-              {profilePictureFile ? profilePictureFile.name : 'No file selected'}
-            </span>
-          </div>
-          <button
-            onClick={handleUploadPicture}
-            disabled={loading || !profilePictureFile}
-            className="mt-4 px-4 py-2 rounded-md bg-[#34aeeb] text-white hover:bg-[#2a8bc7] transition disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {loading && activeAction === 'uploadPic' ? 'Uploading...' : 'Upload Picture'}
-          </button>
-        </div>
-
+      {/* Resume Upload */}
+      <div className="mt-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4">Resume</h2>
+          {profile?.profile?.resume?.resumeURL && (
+            <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-md">
+              <p className="text-sm text-green-700 dark:text-green-300 mb-2">Current Resume:</p>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">{profile.profile.resume.resumeOriginalName}</span>
+                <a
+                  href={profile.profile.resume.resumeURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                >
+                  View
+                </a>
+              </div>
+            </div>
+          )}
           <input
             ref={resumeInputRef}
             id="resume-upload"

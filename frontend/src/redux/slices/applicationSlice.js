@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = "http://localhost:3000/api/v1";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -23,11 +23,13 @@ export const applyToJob = createAsyncThunk(
         formData.append("resume", applicationData.resume);
       }
       
+      console.log('Applying to job with data:', { jobId, coverLetter: applicationData.coverLetter, hasResume: !!applicationData.resume });
       const response = await axiosInstance.post(`/application/apply/${jobId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log('Application response:', response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || "Failed to apply to job");

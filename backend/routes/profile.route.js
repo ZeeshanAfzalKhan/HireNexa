@@ -1,5 +1,5 @@
 import express from "express";
-import {changePassword, deleteProfilePicture, deleteResume, getProfile, updateProfile, updateProfilePicture, updateResume} from "../controllers/profile.controller.js";
+import {changePassword, deleteProfilePicture, deleteResume, getProfile, updateProfile, updateProfilePicture, updateResume, addSkills, deleteSkill} from "../controllers/profile.controller.js";
 import userAuth from "../middlewares/auth.js";
 import { upload } from "../utils/fileUpload.js";
 
@@ -19,5 +19,9 @@ router.patch("/profile-picture/delete", userAuth, deleteProfilePicture);
 router.patch("/resume/update", userAuth, upload.single("resume"), updateResume);
 
 router.patch("/resume/delete", userAuth, deleteResume);
+
+router.patch("/skills/add", userAuth, addSkills);
+
+router.patch("/skills/delete", userAuth, deleteSkill);
 
 export default router;

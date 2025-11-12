@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getErrorMessage, getSuccessMessage } from "../../utils/errorMessages";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -17,7 +18,9 @@ export const login = createAsyncThunk(
       const response = await axiosInstance.post("/auth/login", credentials);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error?.message || "Login failed");
+      const errorCode = error.response?.data?.error?.code;
+      const errorMessage = error.response?.data?.error?.message;
+      return rejectWithValue({ code: errorCode, message: getErrorMessage(errorCode, errorMessage) });
     }
   }
 );
@@ -29,7 +32,9 @@ export const signup = createAsyncThunk(
       const response = await axiosInstance.post("/auth/signup", userData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error?.message || "Signup failed");
+      const errorCode = error.response?.data?.error?.code;
+      const errorMessage = error.response?.data?.error?.message;
+      return rejectWithValue({ code: errorCode, message: getErrorMessage(errorCode, errorMessage) });
     }
   }
 );
@@ -41,7 +46,9 @@ export const logout = createAsyncThunk(
       await axiosInstance.post("/auth/logout");
       return {};
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error?.message || "Logout failed");
+      const errorCode = error.response?.data?.error?.code;
+      const errorMessage = error.response?.data?.error?.message;
+      return rejectWithValue({ code: errorCode, message: getErrorMessage(errorCode, errorMessage) });
     }
   }
 );
@@ -53,7 +60,9 @@ export const getCurrentUser = createAsyncThunk(
       const response = await axiosInstance.get("/auth/me");
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error?.message || "Failed to fetch user");
+      const errorCode = error.response?.data?.error?.code;
+      const errorMessage = error.response?.data?.error?.message;
+      return rejectWithValue({ code: errorCode, message: getErrorMessage(errorCode, errorMessage) });
     }
   }
 );
@@ -95,11 +104,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.isAuthenticated = true;
-        state.message = action.payload.message || "Login successful";
+        state.message = getSuccessMessage('LOGIN_SUCCESS');
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || action.payload;
       });
 
     // Signup
@@ -113,11 +122,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.isAuthenticated = true;
-        state.message = action.payload.message || "Signup successful";
+        state.message = getSuccessMessage('SIGNUP_SUCCESS');
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || action.payload;
       });
 
     // Logout
@@ -130,11 +139,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
-        state.message = "Logout successful";
+        state.message = getSuccessMessage('LOGOUT_SUCCESS');
       })
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || action.payload;
       });
 
     // Get Current User
@@ -147,11 +156,10 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.isAuthenticated = true;
-        state.message = action.payload.message || "User profile loaded";
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || action.payload;
         state.isAuthenticated = false;
       });
   },

@@ -54,7 +54,7 @@ const Settings = () => {
 const ProfileSettings = () => {
   const dispatch = useDispatch();
   const { profile, loading, error, message, getProfile, updateProfile, uploadProfilePicture } = useProfile();
-  const [form, setForm] = useState({ firstName: '', lastName: '', emailId: '', bio: '' });
+  const [form, setForm] = useState({ firstName: '', lastName: '', emailId: '', phoneNumber: '', linkedIn: '', github: '', website: '' });
   const [avatarFile, setAvatarFile] = useState(null);
 
   useEffect(() => {
@@ -67,7 +67,10 @@ const ProfileSettings = () => {
         firstName: profile.firstName || '',
         lastName: profile.lastName || '',
         emailId: profile.emailId || '',
-        bio: profile.profile?.bio || '',
+        phoneNumber: profile.phoneNumber || '',
+        linkedIn: profile.profile?.socials?.linkedIn || '',
+        github: profile.profile?.socials?.github || '',
+        website: profile.profile?.socials?.website || '',
       });
     }
   }, [profile]);
@@ -96,7 +99,14 @@ const ProfileSettings = () => {
     await updateProfile({
       firstName: form.firstName,
       lastName: form.lastName,
-      profile: { bio: form.bio },
+      phoneNumber: form.phoneNumber,
+      profile: { 
+        socials: {
+          linkedIn: form.linkedIn,
+          github: form.github,
+          website: form.website,
+        }
+      },
     });
   };
 
@@ -149,6 +159,8 @@ const ProfileSettings = () => {
           </div>
         </div>
 
+
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium mb-1">First Name</label>
@@ -162,10 +174,49 @@ const ProfileSettings = () => {
             <label className="block text-sm font-medium mb-1">Email</label>
             <input type="email" name="emailId" value={form.emailId} disabled className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" />
           </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Phone Number</label>
+            <input type="tel" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" placeholder="1234567890" />
+          </div>
         </div>
+        {/* Social Links */}
         <div>
-          <label className="block text-sm font-medium mb-1">Bio</label>
-          <textarea rows="4" name="bio" value={form.bio} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" />
+          <h3 className="text-lg font-medium mb-3">Social Links</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">LinkedIn</label>
+              <input
+                type="url"
+                name="linkedIn"
+                value={form.linkedIn}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+                placeholder="https://linkedin.com/in/username"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">GitHub</label>
+              <input
+                type="url"
+                name="github"
+                value={form.github}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+                placeholder="https://github.com/username"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Website</label>
+              <input
+                type="url"
+                name="website"
+                value={form.website}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+                placeholder="https://yourwebsite.com"
+              />
+            </div>
+          </div>
         </div>
         <div className="text-right">
           <button type="submit" disabled={loading} className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-60 disabled:cursor-not-allowed">

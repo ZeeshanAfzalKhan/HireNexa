@@ -20,10 +20,9 @@ const ApplyJob = () => {
   });
   
   const savedResumeUrl = useMemo(() => {
-    const r = profile?.resume;
-    if (typeof r === "string") return r;
-    if (r && typeof r === "object") return r.url || r.link || r.path || r.Location || null;
-    return profile?.resumeUrl || profile?.resumeLink || null;
+    const r = profile?.profile?.resume;
+    if (r && typeof r === "object") return r.resumeURL || null;
+    return null;
   }, [profile]);
   
 
@@ -101,14 +100,13 @@ const ApplyJob = () => {
                 value={form.coverLetter}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-700 rounded-lg bg-gray-900 text-gray-100 focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent min-h-[140px]"
-                placeholder="Write a concise cover letter (min ~50 characters)."
-                minLength={50}
-                required
+                placeholder="Write a concise cover letter (min 20 characters)."
+                minLength={20}
               />
               <p className="text-xs text-gray-500 mt-1">Tip: Share relevant experience and motivation in 1-2 short paragraphs.</p>
               <div className="flex items-center justify-between mt-1 text-xs">
-                <span className="text-gray-500">Minimum 50 characters</span>
-                <span className={form.coverLetter.length >= 50 ? "text-green-400" : "text-red-400"}>
+                <span className="text-gray-500">Minimum 20 characters</span>
+                <span className={form.coverLetter.length >= 20 ? "text-green-400" : "text-red-400"}>
                   {form.coverLetter.length} characters
                 </span>
               </div>

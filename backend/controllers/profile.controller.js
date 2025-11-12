@@ -158,13 +158,13 @@ export const updateProfile = async (req, res) => {
       });
     } else if (
       updates.profile.bio &&
-      !validator.isLength(updates.profile.bio, { min: 20, max: 200 })
+      !validator.isLength(updates.profile.bio, { min: 20, max: 500 })
     ) {
       return res.status(400).json({
         success: false,
         error: {
           code: "INVALID_BIO",
-          message: "Bio must be between 0 and 200 characters",
+          message: "Bio must be between 0 and 500 characters",
         },
       });
     } else if (
@@ -458,5 +458,149 @@ export const deleteResume = async (req, res) => {
           message: "Something went wrong",
         },
       });
+  }
+};
+
+export const addSkills = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { skill } = req.body;
+
+    if (!skill || typeof skill !== 'string' || skill.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: "INVALID_SKILL",
+          message: "Skill is required and must be a string",
+        },
+      });
+    }
+
+    const trimmedSkill = skill.trim();
+    
+    if (trimmedSkill.length < 2 || trimmedSkill.length > 50) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: "INVALID_SKILL_LENGTH",
+          message: "Skill must be between 2 and 50 characters",
+        },
+      });
+    }
+
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: "USER_NOT_FOUND",
+          message: "User not found",
+        },
+      });
+    }
+
+    const currentSkills = user.profile?.skills || [];
+    
+    if (currentSkills.includes(trimmedSkill)) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: "SKILL_ALREADY_EXISTS",
+          message: "This skill already exists in your profile",
+        },
+      });
+    }
+
+    if (currentSkills.length >= 30) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: "TOO_MANY_SKILLS",
+          message: "Cannot exceed 30 skills total",
+        },
+      });
+    }
+
+    user.profile = user.profile || {};
+    user.profile.skills = [...currentSkills, trimmedSkill];
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Skill added successfully",
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
+    });
+  }
+};
+
+export const deleteSkill = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { skill } = req.body;
+
+    if (!skill || typeof skill !== 'string' || skill.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: "INVALID_SKILL",
+          message: "Skill is required and must be a string",
+        },
+      });
+    }
+
+    const trimmedSkill = skill.trim();
+
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: "USER_NOT_FOUND",
+          message: "User not found",
+        },
+      });
+    }
+
+    const currentSkills = user.profile?.skills || [];
+    
+    if (!currentSkills.includes(trimmedSkill)) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: "SKILL_NOT_FOUND",
+          message: "This skill does not exist in your profile",
+        },
+      });
+    }
+
+    user.profile = user.profile || {};
+    user.profile.skills = currentSkills.filter(s => s !== trimmedSkill);
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Skill deleted successfully",
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      },
+    });
   }
 };

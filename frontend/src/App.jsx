@@ -30,18 +30,21 @@ import OAuthCallbackPage from "./pages/OAuthCallbackPage.jsx";
 import ProtectedAppLayout from "./components/ProtectedAppLayout";
 import { useAuth } from "./redux/hooks/useAuth.js";
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { useToastNotifications } from "./hooks/useToastNotifications";
 
 // Layout component that includes the navbar
 const Layout = () => {
   const { getCurrentUser } = useAuth();
-  // Call once on mount to hydrate auth state
+  useToastNotifications();
+  
   useEffect(() => {
     getCurrentUser();
-    // Intentionally no dependencies to avoid repeated calls
   }, []);
 
   return (
     <div className="min-h-screen transition-colors duration-200 flex flex-col">
+      <Toaster position="top-right" />
       <Navbar />
       <div className="flex-1">
         <Outlet />

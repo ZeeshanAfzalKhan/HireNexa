@@ -97,6 +97,30 @@ export const uploadResume = createAsyncThunk(
   }
 );
 
+export const addSkills = createAsyncThunk(
+  "profile/addSkills",
+  async (skill, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch("/profile/skills/add", { skill });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error?.message || "Failed to add skill");
+    }
+  }
+);
+
+export const deleteSkill = createAsyncThunk(
+  "profile/deleteSkill",
+  async (skill, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch("/profile/skills/delete", { skill });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error?.message || "Failed to delete skill");
+    }
+  }
+);
+
 // Initial State
 const initialState = {
   profile: null,
@@ -224,6 +248,46 @@ const profileSlice = createSlice({
         state.message = action.payload.message || "Resume uploaded successfully";
       })
       .addCase(uploadResume.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Add Skills
+    builder
+      .addCase(addSkills.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(addSkills.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.profile) {
+          state.profile.profile = state.profile.profile || {};
+          state.profile.profile.skills = action.payload.user.profile?.skills;
+        }
+        state.message = action.payload.message || "Skills added successfully";
+      })
+      .addCase(addSkills.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Delete Skill
+    builder
+      .addCase(deleteSkill.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(deleteSkill.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.profile) {
+          state.profile.profile = state.profile.profile || {};
+          state.profile.profile.skills = action.payload.user.profile?.skills;
+        }
+        state.message = action.payload.message || "Skill deleted successfully";
+      })
+      .addCase(deleteSkill.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

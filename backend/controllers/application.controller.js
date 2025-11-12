@@ -144,7 +144,7 @@ export const getAppliedJobs = async (req, res) => {
         options: { sort: { createdAt: -1 } },
         populate: {
           path: "company",
-          options: { sort: { crreatedAt: -1 } },
+          options: { sort: { createdAt: -1 } },
         },
       })
       .skip(skip)
