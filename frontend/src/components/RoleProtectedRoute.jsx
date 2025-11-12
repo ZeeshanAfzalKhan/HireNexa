@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 
 const RoleProtectedRoute = ({ children, allowedRoles = [] }) => {
-  const { isAuthenticated, user, loading } = useSelector((state) => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user,
-    loading: state.auth.loading,
-  }));
+  // select primitives / stable refs separately
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user);
+  const loading = useSelector((state) => state.auth.loading);
+
   const location = useLocation();
 
   // Avoid redirect flicker while auth state is being resolved

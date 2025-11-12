@@ -6,8 +6,6 @@ const OAuthCallbackPage = () => {
   const navigate = useNavigate();
   const { getCurrentUser, user, isAuthenticated } = useAuth();
 
-  console.log(user, isAuthenticated);
-
   useEffect(() => {
     const verifyUser = async () => {
       try {

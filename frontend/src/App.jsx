@@ -26,7 +26,7 @@ import Forbidden from "./pages/Forbidden";
 import MyApplications from "./pages/applications/MyApplications";
 import ApplicationsForJob from "./pages/applications/ApplicationsForJob";
 import ApplyJob from "./pages/applications/ApplyJob";
-import OAuthCallbackPage from './pages/OAuthCallbackPage.jsx';
+import OAuthCallbackPage from "./pages/OAuthCallbackPage.jsx";
 import ProtectedAppLayout from "./components/ProtectedAppLayout";
 import { useAuth } from "./redux/hooks/useAuth.js";
 import { useEffect } from "react";
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
           </PublicOnlyRoute>
         ),
       },
-      
+
       {
         path: "login/student",
         element: (
@@ -147,9 +147,7 @@ const router = createBrowserRouter([
           },
           {
             path: "settings",
-            element: (
-              <Settings />
-            ),
+            element: <Settings />,
           },
           {
             path: "my-applications",
@@ -228,7 +226,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
     </>
   );
 }
