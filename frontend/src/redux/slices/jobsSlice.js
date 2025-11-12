@@ -13,9 +13,12 @@ export const fetchAllJobs = createAsyncThunk(
   "jobs/fetchAllJobs",
   async (params = {}, { rejectWithValue }) => {
     try {
+      
       const response = await axiosInstance.get("/job/get", { params });
+      
       return response.data;
     } catch (error) {
+      console.error("Error fetching jobs:", error);
       return rejectWithValue(error.response?.data?.error?.message || "Failed to fetch jobs");
     }
   }
