@@ -26,7 +26,7 @@
 
 /* Responsive content margin for fixed Sidebar */
 :root {
-  --sidebar-width: 16rem; /* default expanded width */
+  --sidebar-width: 0; /* default when Sidebar is not mounted */
 }
 
 @media (min-width: 768px) {

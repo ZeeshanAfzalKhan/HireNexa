@@ -45,7 +45,6 @@ const Sidebar = () => {
       return [
         { name: "Dashboard", path: "/candidate-dashboard", icon: "📊" },
         { name: "Profile", path: "/candidate-profile", icon: "👤" },
-        { name: "Jobs", path: "/jobs", icon: "💼" },
         { name: "My Applications", path: "/my-applications", icon: "📋" },
         { name: "Settings", path: "/settings", icon: "⚙️" },
       ];
@@ -55,7 +54,6 @@ const Sidebar = () => {
       return [
         { name: "Dashboard", path: "/recruitor-dashboard", icon: "📊" },
         { name: "Company Profile", path: "/company-profile", icon: "👤" },
-        { name: "Jobs", path: "/jobs", icon: "💼" },
         { name: "Post Job", path: "/post-job", icon: "📝" },
         { name: "Applications", path: "/applications-for-job", icon: "📋" },
         { name: "Settings", path: "/settings", icon: "⚙️" },
@@ -64,7 +62,6 @@ const Sidebar = () => {
     // Fallback: generic links
     return [
       { name: "Home", path: "/", icon: "🏠" },
-      { name: "Jobs", path: "/jobs", icon: "💼" },
       { name: "Login", path: "/login/student", icon: "🔐" },
     ];
   })();
@@ -73,7 +70,7 @@ const Sidebar = () => {
     <div
       className={`hidden md:block bg-gray-900 text-white shadow-lg transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
-      } min-h-screen fixed left-0 top-0 z-40`}
+      } min-h-screen fixed left-0 top-16 z-40`}
     >
       {/* Toggle Button */}
       <div className="p-4 border-b border-gray-700">
@@ -81,7 +78,7 @@ const Sidebar = () => {
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="w-full flex items-center justify-center p-2 rounded-lg hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
         >
-          <span className="text-[#34aeeb]">{isCollapsed ? "→" : "←"}</span>
+          <span className="text-[#34aeeb] text-2xl">{isCollapsed ? "»" : "«"}</span>
         </button>
       </div>
 
