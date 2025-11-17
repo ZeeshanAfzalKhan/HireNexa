@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Twitter, Linkedin, Github, MessageCircle, Send } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -26,10 +27,10 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { name: "Twitter", icon: "🐦", url: "https://twitter.com" },
-    { name: "LinkedIn", icon: "💼", url: "https://linkedin.com" },
-    { name: "GitHub", icon: "🐙", url: "https://github.com" },
-    { name: "Discord", icon: "💬", url: "https://discord.com" },
+    { name: "Twitter", icon: Twitter, url: "https://twitter.com" },
+    { name: "LinkedIn", icon: Linkedin, url: "https://linkedin.com" },
+    { name: "GitHub", icon: Github, url: "https://github.com" },
+    { name: "Discord", icon: MessageCircle, url: "https://discord.com" },
   ];
 
   return (
@@ -59,7 +60,7 @@ const Footer = () => {
                   className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-[#34aeeb] transition-colors duration-200"
                   title={social.name}
                 >
-                  <span className="text-lg">{social.icon}</span>
+                  <social.icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
@@ -132,7 +133,8 @@ const Footer = () => {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#34aeeb] transition-colors duration-200"
               />
-              <button className="px-6 py-2 bg-[#34aeeb] hover:bg-[#2a8bc7] text-white rounded-lg font-medium transition-colors duration-200 cursor-pointer">
+              <button className="flex items-center gap-2 px-6 py-2 bg-[#34aeeb] hover:bg-[#2a8bc7] text-white rounded-lg font-medium transition-colors duration-200 cursor-pointer">
+                <Send className="w-4 h-4" />
                 Subscribe
               </button>
             </div>

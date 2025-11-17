@@ -5,6 +5,7 @@ import { useCompany } from '../redux/hooks/useCompany';
 import { useAuth } from '../redux/hooks/useAuth';
 import { clearError as clearProfileError, clearMessage as clearProfileMessage } from '../redux/slices/profileSlice';
 import { clearError as clearCompanyError, clearMessage as clearCompanyMessage } from '../redux/slices/companySlice';
+import { Settings as SettingsIcon, User, Shield, Bell, Lock, Upload, Edit3, Trash2 } from 'lucide-react';
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -25,25 +26,50 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-3xl font-bold mb-8">Settings</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-slate-800 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#34aeeb] rounded-2xl mb-4">
+            <SettingsIcon className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+            Settings
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Manage your account preferences and settings</p>
+        </div>
+        
         <div className="lg:flex lg:space-x-8">
           {/* Tabs */}
           <div className="lg:w-1/4 mb-8 lg:mb-0">
-            <nav className="flex flex-col space-y-2">
-              <button onClick={() => setActiveTab('profile')} className={`text-left px-4 py-2 rounded-lg cursor-pointer ${activeTab === 'profile' ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}>Profile</button>
-              <button onClick={() => setActiveTab('account')} className={`text-left px-4 py-2 rounded-lg cursor-pointer ${activeTab === 'account' ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}>Account</button>
-              <button onClick={() => setActiveTab('notifications')} className={`text-left px-4 py-2 rounded-lg cursor-pointer ${activeTab === 'notifications' ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}>Notifications</button>
-              <button onClick={() => setActiveTab('privacy')} className={`text-left px-4 py-2 rounded-lg cursor-pointer ${activeTab === 'privacy' ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}>Privacy</button>
-            </nav>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="bg-[#34aeeb] px-6 py-4">
+                <h2 className="text-lg font-bold text-white">Navigation</h2>
+              </div>
+              <nav className="p-4 space-y-2">
+                <button onClick={() => setActiveTab('profile')} className={`w-full text-left px-4 py-3 rounded-xl cursor-pointer transition-all flex items-center gap-3 ${activeTab === 'profile' ? 'bg-[#34aeeb] text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}`}>
+                  <User className="w-4 h-4" />
+                  Profile
+                </button>
+                <button onClick={() => setActiveTab('account')} className={`w-full text-left px-4 py-3 rounded-xl cursor-pointer transition-all flex items-center gap-3 ${activeTab === 'account' ? 'bg-[#34aeeb] text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}`}>
+                  <Shield className="w-4 h-4" />
+                  Account
+                </button>
+                <button onClick={() => setActiveTab('notifications')} className={`w-full text-left px-4 py-3 rounded-xl cursor-pointer transition-all flex items-center gap-3 ${activeTab === 'notifications' ? 'bg-[#34aeeb] text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}`}>
+                  <Bell className="w-4 h-4" />
+                  Notifications
+                </button>
+                <button onClick={() => setActiveTab('privacy')} className={`w-full text-left px-4 py-3 rounded-xl cursor-pointer transition-all flex items-center gap-3 ${activeTab === 'privacy' ? 'bg-[#34aeeb] text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}`}>
+                  <Lock className="w-4 h-4" />
+                  Privacy
+                </button>
+              </nav>
+            </div>
           </div>
 
           {/* Content */}
           <div className="lg:w-3/4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              {renderContent()}
-            </div>
+            {renderContent()}
           </div>
         </div>
       </div>
@@ -124,106 +150,134 @@ const ProfileSettings = () => {
   const avatarUrl = profile?.profile?.profilePicture?.profilePictureURL;
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">Profile Settings</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-[#34aeeb] px-8 py-6">
+        <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+          <User className="w-6 h-6" />
+          Profile Settings
+        </h2>
+        <p className="text-blue-100 mt-2">Update your personal information and social links</p>
+      </div>
+      
+      <div className="p-8">
+        {error && (
+          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300 flex items-center gap-3">
+            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            {error}
+          </div>
+        )}
+        {message && (
+          <div className="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300 flex items-center gap-3">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            {message}
+          </div>
+        )}
 
-      {message && (
-        <div className="mb-4 p-3 rounded bg-green-100 text-green-700 border border-green-200">{message}</div>
-      )}
-      {error && (
-        <div className="mb-4 p-3 rounded bg-red-100 text-red-700 border border-red-200">{error}</div>
-      )}
-
-      <form onSubmit={handleSave} className="space-y-6">
-        <div className="flex items-center space-x-4">
-          {avatarUrl ? (
-            <img src={avatarUrl} alt="Avatar" className="w-24 h-24 rounded-full object-cover" />
-          ) : (
-            <div className="w-24 h-24 rounded-full bg-[#34aeeb] flex items-center justify-center text-white text-2xl font-bold">
-              {(form.firstName || 'U').charAt(0).toUpperCase()}
+        <form onSubmit={handleSave} className="space-y-6">
+          <div className="flex items-center space-x-6">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="Avatar" className="w-24 h-24 rounded-full object-cover border-4 border-gray-200 dark:border-gray-600" />
+            ) : (
+              <div className="w-24 h-24 rounded-full bg-[#34aeeb] flex items-center justify-center text-white text-2xl font-bold border-4 border-gray-200 dark:border-gray-600">
+                {(form.firstName || 'U').charAt(0).toUpperCase()}
+              </div>
+            )}
+            <div className="space-y-2">
+              <input
+                id="avatar-input"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarSelect}
+              />
+              <div className="flex gap-2">
+                <label htmlFor="avatar-input" className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer transition-all">
+                  <Upload className="w-4 h-4" />
+                  Choose Avatar
+                </label>
+                <button type="button" onClick={handleAvatarUpload} disabled={loading || !avatarFile} className="flex items-center gap-2 px-4 py-2 bg-[#34aeeb] text-white rounded-xl hover:bg-[#279ed8] disabled:opacity-60 disabled:cursor-not-allowed transition-all">
+                  {loading ? 'Uploading...' : 'Upload'}
+                </button>
+              </div>
+              {avatarFile && <p className="text-sm text-gray-500 dark:text-gray-400">{avatarFile.name}</p>}
             </div>
-          )}
-          <div>
-            <input
-              id="avatar-input"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleAvatarSelect}
-            />
-            <label htmlFor="avatar-input" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer inline-block">Choose Avatar</label>
-            <button type="button" onClick={handleAvatarUpload} disabled={loading || !avatarFile} className="ml-2 px-4 py-2 bg-[#34aeeb] text-white rounded-lg hover:bg-[#2a8bc7] disabled:opacity-60 disabled:cursor-not-allowed">
-              {loading ? 'Uploading...' : 'Upload'}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">First Name</label>
+              <input type="text" name="firstName" value={form.firstName} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all" />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Last Name</label>
+              <input type="text" name="lastName" value={form.lastName} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all" />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Email</label>
+              <input type="email" name="emailId" value={form.emailId} disabled className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white opacity-60" />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Phone Number</label>
+              <input type="tel" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all" placeholder="1234567890" />
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Social Links</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">LinkedIn</label>
+                <input
+                  type="url"
+                  name="linkedIn"
+                  value={form.linkedIn}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all"
+                  placeholder="https://linkedin.com/in/username"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">GitHub</label>
+                <input
+                  type="url"
+                  name="github"
+                  value={form.github}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all"
+                  placeholder="https://github.com/username"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Website</label>
+                <input
+                  type="url"
+                  name="website"
+                  value={form.website}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all"
+                  placeholder="https://yourwebsite.com"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-end">
+            <button type="submit" disabled={loading} className="flex items-center gap-2 px-8 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Edit3 className="w-5 h-5" />
+                  Save Changes
+                </>
+              )}
             </button>
-            {avatarFile && <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{avatarFile.name}</p>}
           </div>
-        </div>
-
-
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium mb-1">First Name</label>
-            <input type="text" name="firstName" value={form.firstName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Last Name</label>
-            <input type="text" name="lastName" value={form.lastName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input type="email" name="emailId" value={form.emailId} disabled className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Phone Number</label>
-            <input type="tel" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" placeholder="1234567890" />
-          </div>
-        </div>
-        {/* Social Links */}
-        <div>
-          <h3 className="text-lg font-medium mb-3">Social Links</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">LinkedIn</label>
-              <input
-                type="url"
-                name="linkedIn"
-                value={form.linkedIn}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
-                placeholder="https://linkedin.com/in/username"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">GitHub</label>
-              <input
-                type="url"
-                name="github"
-                value={form.github}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
-                placeholder="https://github.com/username"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Website</label>
-              <input
-                type="url"
-                name="website"
-                value={form.website}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
-                placeholder="https://yourwebsite.com"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="text-right">
-          <button type="submit" disabled={loading} className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-60 disabled:cursor-not-allowed">
-            {loading ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
@@ -294,110 +348,187 @@ const AccountSettings = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">Account Settings</h2>
-
-      {/* Change Password */}
-      <div className="space-y-2 mb-6">
-        <h3 className="text-lg font-semibold">Change Password</h3>
-        {localError && (
-          <div className="mb-2 p-3 rounded bg-red-100 text-red-700 border border-red-200">{localError}</div>
-        )}
-        {profileError && (
-          <div className="mb-2 p-3 rounded bg-red-100 text-red-700 border border-red-200">{profileError}</div>
-        )}
-        {profileMessage && (
-          <div className="mb-2 p-3 rounded bg-green-100 text-green-700 border border-green-200">{profileMessage}</div>
-        )}
-        <form onSubmit={handleChangePassword} className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
-          <div>
-            <label className="block text-sm font-medium mb-1">Current Password</label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">New Password</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Confirm New Password</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
-              required
-            />
-          </div>
-          <div className="md:col-span-3">
-            <button
+    <div className="space-y-8">
+      {/* Change Password Card */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-[#34aeeb] px-8 py-6">
+          <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+            <Shield className="w-6 h-6" />
+            Change Password
+          </h2>
+          <p className="text-blue-100 mt-2">Update your account password for security</p>
+        </div>
+        
+        <div className="p-8">
+          {localError && (
+            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300 flex items-center gap-3">
+              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+              {localError}
+            </div>
+          )}
+          {profileError && (
+            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300 flex items-center gap-3">
+              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+              {profileError}
+            </div>
+          )}
+          {profileMessage && (
+            <div className="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300 flex items-center gap-3">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              {profileMessage}
+            </div>
+          )}
+          
+          <form onSubmit={handleChangePassword} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Current Password</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Confirm New Password</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent transition-all"
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <button
                 type="submit"
                 disabled={profileLoading}
-                className="mt-2 px-4 py-2 bg-[#34aeeb] text-white rounded-lg hover:bg-[#2a8bc7] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                className="flex items-center gap-2 px-8 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {profileLoading ? 'Updating...' : 'Update Password'}
+                {profileLoading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <Shield className="w-5 h-5" />
+                    Update Password
+                  </>
+                )}
               </button>
-          </div>
-        </form>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <hr className="dark:border-gray-600"/>
-
-      {/* Recruiter Company Deletion */}
+      {/* Company Management Card */}
       {user?.role === 'recruitor' && (
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold text-red-500">Delete Company</h3>
-          {companyError && (
-            <div className="mt-2 p-3 rounded bg-red-100 text-red-700 border border-red-200">{companyError}</div>
-          )}
-          {companyMessage && (
-            <div className="mt-2 p-3 rounded bg-green-100 text-green-700 border border-green-200">{companyMessage}</div>
-          )}
-          {company ? (
-            <>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Company: <span className="font-medium">{company.name}</span></p>
-              <button
-                onClick={handleDeleteCompany}
-                className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                disabled={companyLoading}
-              >
-                {companyLoading ? 'Deleting...' : 'Delete Company'}
-              </button>
-            </>
-          ) : (
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">No company registered.</p>
-          )}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-red-500 px-8 py-6">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Trash2 className="w-6 h-6" />
+              Company Management
+            </h2>
+            <p className="text-red-100 mt-2">Manage your company registration</p>
+          </div>
+          
+          <div className="p-8">
+            {companyError && (
+              <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300 flex items-center gap-3">
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                {companyError}
+              </div>
+            )}
+            {companyMessage && (
+              <div className="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300 flex items-center gap-3">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                {companyMessage}
+              </div>
+            )}
+            
+            {company ? (
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Current Company:</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{company.name}</p>
+                </div>
+                <button
+                  onClick={handleDeleteCompany}
+                  className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                  disabled={companyLoading}
+                >
+                  {companyLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="w-5 h-5" />
+                      Delete Company
+                    </>
+                  )}
+                </button>
+              </div>
+            ) : (
+              <p className="text-gray-600 dark:text-gray-400">No company registered.</p>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Delete Account (placeholder) */}
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold text-red-500">Delete Account</h3>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Permanently delete your account and all of your content.</p>
-        <button className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 cursor-pointer">Delete My Account</button>
+      {/* Delete Account Card */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-red-600 px-8 py-6">
+          <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+            <Trash2 className="w-6 h-6" />
+            Danger Zone
+          </h2>
+          <p className="text-red-100 mt-2">Permanently delete your account and all data</p>
+        </div>
+        
+        <div className="p-8">
+          <div className="space-y-4">
+            <p className="text-gray-600 dark:text-gray-400">Once you delete your account, there is no going back. Please be certain.</p>
+            <button className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all transform hover:scale-[1.02]">
+              <Trash2 className="w-5 h-5" />
+              Delete My Account
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 const NotificationSettings = () => (
-  <div>
-    <h2 className="text-2xl font-bold mb-6">Notification Settings</h2>
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="bg-[#34aeeb] px-8 py-6">
+      <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+        <Bell className="w-6 h-6" />
+        Notification Settings
+      </h2>
+      <p className="text-blue-100 mt-2">Manage how you receive notifications</p>
+    </div>
+    
+    <div className="p-8 space-y-6">
+      <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
         <div>
-          <h3 className="text-lg font-semibold">Email Notifications</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Email Notifications</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">Receive emails about your account activity.</p>
         </div>
         <label className="switch">
@@ -405,10 +536,10 @@ const NotificationSettings = () => (
           <span className="slider round"></span>
         </label>
       </div>
-      <hr className="dark:border-gray-600"/>
-      <div className="flex items-center justify-between">
+      
+      <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
         <div>
-          <h3 className="text-lg font-semibold">Push Notifications</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Push Notifications</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">Get push notifications on your mobile device.</p>
         </div>
         <label className="switch">
@@ -416,10 +547,10 @@ const NotificationSettings = () => (
           <span className="slider round"></span>
         </label>
       </div>
-       <hr className="dark:border-gray-600"/>
-      <div className="flex items-center justify-between">
+      
+      <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
         <div>
-          <h3 className="text-lg font-semibold">Job Recommendations</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Job Recommendations</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">Receive notifications for jobs that match your profile.</p>
         </div>
         <label className="switch">
@@ -432,24 +563,31 @@ const NotificationSettings = () => (
 );
 
 const PrivacySettings = () => (
-  <div>
-    <h2 className="text-2xl font-bold mb-6">Privacy Settings</h2>
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="bg-[#34aeeb] px-8 py-6">
+      <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+        <Lock className="w-6 h-6" />
+        Privacy Settings
+      </h2>
+      <p className="text-blue-100 mt-2">Control your privacy and data visibility</p>
+    </div>
+    
+    <div className="p-8 space-y-6">
+      <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
         <div>
-          <h3 className="text-lg font-semibold">Profile Visibility</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Profile Visibility</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">Control who can see your profile.</p>
         </div>
-        <select className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
+        <select className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#34aeeb] focus:border-transparent">
           <option>Public</option>
           <option>Recruiters Only</option>
           <option>Private</option>
         </select>
       </div>
-      <hr className="dark:border-gray-600"/>
-      <div className="flex items-center justify-between">
+      
+      <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
         <div>
-          <h3 className="text-lg font-semibold">Search Indexing</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Search Indexing</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">Allow search engines to index your profile.</p>
         </div>
         <label className="switch">
