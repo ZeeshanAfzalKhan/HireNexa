@@ -19,28 +19,29 @@ router.get("/google", (req, res, next) => {
 });
 
 // Callback – on failure, go back to frontend login
-router.get(
-  "/google/callback",
+router.get("/google/callback", (req, res, next) => {
+  const role = req.query.state || "student";
   passport.authenticate("google", {
     session: false,
-    failureRedirect: `${process.env.FRONTEND_URL}/login/student?oauth=cancelled`,
-  }),
-  oauthCallback
-);
+    failureRedirect: `${process.env.FRONTEND_URL}/login/${role}?error=oauth_failed`,
+  })(req, res, next);
+}, oauthCallback);
 
 
-router.get(
-  "/github",
-  passport.authenticate("github", { scope: ["user:email"] })
-);
-router.get(
-  "/github/callback",
+router.get("/github", (req, res, next) => {
+  const role = req.query.role;
+  passport.authenticate("github", {
+    scope: ["user:email"],
+    state: role,
+  })(req, res, next);
+});
+router.get("/github/callback", (req, res, next) => {
+  const role = req.query.state || "student";
   passport.authenticate("github", {
     session: false,
-    failureRedirect: `${process.env.FRONTEND_URL}/login?error=oauth_failed`,
-  }),
-  oauthCallback
-);
+    failureRedirect: `${process.env.FRONTEND_URL}/login/${role}?error=oauth_failed`,
+  })(req, res, next);
+}, oauthCallback);
 
 router.get(
   "/linkedin",

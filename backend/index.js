@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import passport from "passport";
 import "./utils/googleOAuth.js";
+import "./utils/githubOAuth.js";
 
 import connectDB from "./utils/database.js";
 

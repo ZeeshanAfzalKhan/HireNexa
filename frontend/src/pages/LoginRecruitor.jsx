@@ -4,6 +4,7 @@ import { useAuth } from '../redux/hooks/useAuth.js';
 import { useDispatch } from 'react-redux';
 import { clearError, clearMessage } from '../redux/slices/authSlice';
 import { Mail, Lock, Building2, Eye, EyeOff } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -48,11 +49,17 @@ const LoginRecruitor = () => {
   }, [isAuthenticated, user, navigate, location]);
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const oauthError = params.get('error');
+    if (oauthError === 'oauth_failed') {
+      toast.error('OAuth authentication failed. Please try again.');
+      window.history.replaceState({}, '', location.pathname);
+    }
     return () => {
       dispatch(clearError());
       dispatch(clearMessage());
     };
-  }, [dispatch]);
+  }, [dispatch, location]);
 
   const handleOAuthLogin = (provider) => {
     const role = 'recruitor';

@@ -14,7 +14,7 @@ passport.use(
     },
     async (req, accessToken, refreshToken, profile, done) => {
        try {
-        const roleFromRequest = req.query.state; // here we read the role
+        const roleFromRequest = req.query.state;
         const user = await handleOAuthLogin({
           provider: "google",
           profile,
@@ -22,7 +22,8 @@ passport.use(
         })
         return done(null, user);
       } catch (err) {
-        return done(err, null);
+        console.error("Google strategy error:", err);
+        return done(null, false, { message: err.message });
       }
     }
   )

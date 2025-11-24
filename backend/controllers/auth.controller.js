@@ -251,7 +251,7 @@ export const getMe = async (req, res) => {
 
 export const oauthCallback = async (req, res) => {
   try {
-    const { user } = req.user;
+    const user = req.user?.user || req.user;
 
     console.log("OAuth user:", user);
 

@@ -6,35 +6,35 @@ import User from "../models/user.model.js";
  */
 export const handleOAuthLogin = async ({ provider, profile, roleFromRequest }) => {
   try {
-    const email = profile.emails?.[0]?.value?.toLowerCase();
+    console.log("OAuth Profile:", JSON.stringify(profile, null, 2));
+    console.log("Role from request:", roleFromRequest);
+
+    const email = (profile.emails?.[0]?.value || profile._json?.email)?.toLowerCase();
     if (!email) {
-      return { user: null, error: "Email not found from OAuth provider" };
+      throw new Error("Email not found from OAuth provider");
     }
 
     if (!["student", "recruitor"].includes(roleFromRequest)) {
-      return { user: null, error: "Invalid role" };
+      throw new Error("Invalid role");
     }
 
-    // 1️⃣ Try to find user by provider ID first
     let user = await User.findOne({
       "authProviders.provider": provider,
       "authProviders.providerId": profile.id,
     });
 
-    // 2️⃣ If not found, try by email
     if (!user) {
       user = await User.findOne({ emailId: email });
     }
 
-    // 3️⃣ Role validation for existing users
     if (user && roleFromRequest && user.role !== roleFromRequest) {
-      return { user: null, error: `Account doesn't exist with role ${roleFromRequest}` };
+      throw new Error(`Account doesn't exist with role ${roleFromRequest}`);
     }
 
-    // 4️⃣ If user doesn't exist, create new
     if (!user) {
-      const nameSplit = profile.displayName ? profile.displayName.split(" ") : [];
-      const firstName = nameSplit[0] || "";
+      const displayName = profile.displayName || profile.username || profile._json?.name || "User";
+      const nameSplit = displayName.split(" ");
+      const firstName = nameSplit[0] || "User";
       const lastName = nameSplit.slice(1).join(" ") || "";
 
       user = await User.create({
@@ -49,10 +49,9 @@ export const handleOAuthLogin = async ({ provider, profile, roleFromRequest }) =
             profilePictureURL: profile.photos?.[0]?.value || "",
           },
         ],
-        role: roleFromRequest, // assign role from request
+        role: roleFromRequest,
       });
     } else {
-      // 5️⃣ Link new provider if not already linked
       const alreadyLinked = user.authProviders.some((p) => p.provider === provider);
       if (!alreadyLinked) {
         user.authProviders.push({
@@ -64,9 +63,9 @@ export const handleOAuthLogin = async ({ provider, profile, roleFromRequest }) =
       }
     }
 
-    return { user, error: null };
+    return { user };
   } catch (err) {
     console.error("OAuth login error:", err);
-    return { user: null, error: "Internal server error" };
+    throw err;
   }
 };

@@ -7,14 +7,22 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: `${process.env.BACKEND_URL}/api/v1/auth/github/callback`,
+      callbackURL: `${process.env.BACKEND_URL}/api/v1/auth/github/callback`,
+      passReqToCallback: true,
+      scope: ["user:email"],
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
       try {
-        const user = await handleOAuthLogin({ provider: "github", profile });
+        const roleFromRequest = req.query.state;
+        const user = await handleOAuthLogin({
+          provider: "github",
+          profile,
+          roleFromRequest,
+        });
         return done(null, user);
       } catch (err) {
-        return done(err, null);
+        console.error("GitHub strategy error:", err);
+        return done(null, false, { message: err.message });
       }
     }
   )
