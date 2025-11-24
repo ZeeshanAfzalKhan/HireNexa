@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import {
@@ -32,9 +32,41 @@ import {
   clearMessage as clearCompanyMessage,
 } from "../redux/slices/companySlice";
 
-export const useToastNotifications = () => {
-  const dispatch = useDispatch();
+const TOAST_CONFIG = {
+  error: {
+    duration: 4000,
+    icon: '❌',
+  },
+  success: {
+    duration: 3000,
+    icon: '✅',
+  },
+};
 
+const useNotificationHandler = (error, message, clearError, clearMessage) => {
+  const dispatch = useDispatch();
+  const shownNotifications = useRef(new Set());
+
+  useEffect(() => {
+    if (error && !shownNotifications.current.has(error)) {
+      shownNotifications.current.add(error);
+      toast.error(error, TOAST_CONFIG.error);
+      dispatch(clearError());
+      setTimeout(() => shownNotifications.current.delete(error), 100);
+    }
+  }, [error, dispatch, clearError]);
+
+  useEffect(() => {
+    if (message && !shownNotifications.current.has(message)) {
+      shownNotifications.current.add(message);
+      toast.success(message, TOAST_CONFIG.success);
+      dispatch(clearMessage());
+      setTimeout(() => shownNotifications.current.delete(message), 100);
+    }
+  }, [message, dispatch, clearMessage]);
+};
+
+export const useToastNotifications = () => {
   const authError = useSelector(selectAuthError);
   const authMessage = useSelector(selectAuthMessage);
   const jobsError = useSelector(selectJobsError);
@@ -46,58 +78,9 @@ export const useToastNotifications = () => {
   const companyError = useSelector(selectCompanyError);
   const companyMessage = useSelector(selectCompanyMessage);
 
-  useEffect(() => {
-    if (authError) {
-      toast.error(authError);
-      dispatch(clearAuthError());
-    }
-    if (authMessage) {
-      toast.success(authMessage);
-      dispatch(clearAuthMessage());
-    }
-  }, [authError, authMessage]);
-
-  useEffect(() => {
-    if (jobsError) {
-      toast.error(jobsError);
-      dispatch(clearJobsError());
-    }
-    if (jobsMessage) {
-      toast.success(jobsMessage);
-      dispatch(clearJobsMessage());
-    }
-  }, [jobsError, jobsMessage]);
-
-  useEffect(() => {
-    if (applicationError) {
-      toast.error(applicationError);
-      dispatch(clearApplicationError());
-    }
-    if (applicationMessage) {
-      toast.success(applicationMessage);
-      dispatch(clearApplicationMessage());
-    }
-  }, [applicationError, applicationMessage]);
-
-  useEffect(() => {
-    if (profileError) {
-      toast.error(profileError);
-      dispatch(clearProfileError());
-    }
-    if (profileMessage) {
-      toast.success(profileMessage);
-      dispatch(clearProfileMessage());
-    }
-  }, [profileError, profileMessage]);
-
-  useEffect(() => {
-    if (companyError) {
-      toast.error(companyError);
-      dispatch(clearCompanyError());
-    }
-    if (companyMessage) {
-      toast.success(companyMessage);
-      dispatch(clearCompanyMessage());
-    }
-  }, [companyError, companyMessage]);
+  useNotificationHandler(authError, authMessage, clearAuthError, clearAuthMessage);
+  useNotificationHandler(jobsError, jobsMessage, clearJobsError, clearJobsMessage);
+  useNotificationHandler(applicationError, applicationMessage, clearApplicationError, clearApplicationMessage);
+  useNotificationHandler(profileError, profileMessage, clearProfileError, clearProfileMessage);
+  useNotificationHandler(companyError, companyMessage, clearCompanyError, clearCompanyMessage);
 };

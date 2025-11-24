@@ -80,7 +80,7 @@ const Sidebar = () => {
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <button
             onClick={() => setIsCollapsed((s) => !s)}
-            className="w-full flex items-center justify-center p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
+            className="w-full flex items-center justify-center p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150 cursor-pointer"
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? (

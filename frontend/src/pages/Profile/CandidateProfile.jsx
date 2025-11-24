@@ -261,7 +261,7 @@ const CandidateProfile = () => {
                   <button
                     type="button"
                     onClick={addSkill}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] transition-all"
+                    className="flex items-center gap-2 px-6 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] transition-all cursor-pointer"
                   >
                     <Plus className="w-4 h-4" />
                     Add
@@ -340,7 +340,7 @@ const CandidateProfile = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center gap-2 px-8 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                  className="flex items-center gap-2 px-8 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
                 >
                   {activeAction === 'save' && loading ? (
                     <>
@@ -416,7 +416,7 @@ const CandidateProfile = () => {
                 <button
                   onClick={handleUploadResume}
                   disabled={loading || !resumeFile}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
                 >
                   {activeAction === 'uploadResume' && loading ? (
                     <>

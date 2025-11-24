@@ -100,7 +100,7 @@ const ContactPage = () => {
 
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 bg-[#34aeeb] hover:bg-[#279ed8] text-white font-semibold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02]"
+                  className="w-full flex items-center justify-center gap-2 bg-[#34aeeb] hover:bg-[#279ed8] text-white font-semibold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] cursor-pointer"
                 >
                   <Send className="w-5 h-5" />
                   Send Message
@@ -176,7 +176,7 @@ const ContactPage = () => {
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
                   Our support team is available 24/7 to help you with any questions or issues you might have.
                 </p>
-                <button className="flex items-center gap-2 bg-[#34aeeb] hover:bg-[#279ed8] text-white font-semibold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02]">
+                <button className="flex items-center gap-2 bg-[#34aeeb] hover:bg-[#279ed8] text-white font-semibold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] cursor-pointer">
                   <MessageCircle className="w-5 h-5" />
                   Live Chat
                 </button>

@@ -52,7 +52,10 @@ const LoginStudent = () => {
     const params = new URLSearchParams(location.search);
     const oauthError = params.get('error');
     if (oauthError === 'oauth_failed') {
-      toast.error('OAuth authentication failed. Please try again.');
+      toast.error('OAuth authentication failed. Please try again.', {
+        duration: 4000,
+        icon: '❌',
+      });
       window.history.replaceState({}, '', location.pathname);
     }
     return () => {
@@ -103,20 +106,6 @@ const LoginStudent = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-2xl rounded-2xl border border-gray-200 dark:border-gray-700 sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300 px-4 py-3 rounded-xl flex items-center gap-3">
-                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                {error}
-              </div>
-            )}
-
-            {message && (
-              <div className="bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300 px-4 py-3 rounded-xl flex items-center gap-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                {message}
-              </div>
-            )}
-
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <Mail className="w-4 h-4" />

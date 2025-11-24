@@ -195,7 +195,7 @@ const ProfileSettings = () => {
                   <Upload className="w-4 h-4" />
                   Choose Avatar
                 </label>
-                <button type="button" onClick={handleAvatarUpload} disabled={loading || !avatarFile} className="flex items-center gap-2 px-4 py-2 bg-[#34aeeb] text-white rounded-xl hover:bg-[#279ed8] disabled:opacity-60 disabled:cursor-not-allowed transition-all">
+                <button type="button" onClick={handleAvatarUpload} disabled={loading || !avatarFile} className="flex items-center gap-2 px-4 py-2 bg-[#34aeeb] text-white rounded-xl hover:bg-[#279ed8] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer transition-all">
                   {loading ? 'Uploading...' : 'Upload'}
                 </button>
               </div>
@@ -262,7 +262,7 @@ const ProfileSettings = () => {
           </div>
           
           <div className="flex justify-end">
-            <button type="submit" disabled={loading} className="flex items-center gap-2 px-8 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
+            <button type="submit" disabled={loading} className="flex items-center gap-2 px-8 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none cursor-pointer">
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -416,7 +416,7 @@ const AccountSettings = () => {
               <button
                 type="submit"
                 disabled={profileLoading}
-                className="flex items-center gap-2 px-8 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                className="flex items-center gap-2 px-8 py-3 bg-[#34aeeb] text-white font-semibold rounded-xl hover:bg-[#279ed8] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
               >
                 {profileLoading ? (
                   <>
@@ -468,7 +468,7 @@ const AccountSettings = () => {
                 </div>
                 <button
                   onClick={handleDeleteCompany}
-                  className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                  className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
                   disabled={companyLoading}
                 >
                   {companyLoading ? (
@@ -504,7 +504,7 @@ const AccountSettings = () => {
         <div className="p-8">
           <div className="space-y-4">
             <p className="text-gray-600 dark:text-gray-400">Once you delete your account, there is no going back. Please be certain.</p>
-            <button className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all transform hover:scale-[1.02]">
+            <button className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all transform hover:scale-[1.02] cursor-pointer">
               <Trash2 className="w-5 h-5" />
               Delete My Account
             </button>

@@ -33,14 +33,47 @@ import ProtectedAppLayout from "./components/ProtectedAppLayout";
 
 import { Toaster } from "react-hot-toast";
 import { useToastNotifications } from "./hooks/useToastNotifications";
+import { useAuth } from "./redux/hooks/useAuth.js";
+
+const TOASTER_CONFIG = {
+  position: "top-right",
+  toastOptions: {
+    duration: 3000,
+    style: {
+      background: '#363636',
+      color: '#fff',
+      borderRadius: '10px',
+      padding: '16px',
+    },
+    success: {
+      duration: 3000,
+      iconTheme: {
+        primary: '#10b981',
+        secondary: '#fff',
+      },
+    },
+    error: {
+      duration: 4000,
+      iconTheme: {
+        primary: '#ef4444',
+        secondary: '#fff',
+      },
+    },
+  },
+};
 
 // Layout component that includes the navbar
 const Layout = () => {
+  const { getCurrentUser } = useAuth();
   useToastNotifications();
+
+  React.useEffect(() => {
+    getCurrentUser();
+  }, []);
 
   return (
     <div className="min-h-screen transition-colors duration-200 flex flex-col">
-      <Toaster position="top-right" />
+      <Toaster {...TOASTER_CONFIG} />
       <Navbar />
       <div className="flex-1">
         <Outlet />
