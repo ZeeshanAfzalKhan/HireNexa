@@ -157,9 +157,8 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.isAuthenticated = true;
       })
-      .addCase(getCurrentUser.rejected, (state, action) => {
+      .addCase(getCurrentUser.rejected, (state) => {
         state.loading = false;
-        state.error = action.payload?.message || action.payload;
         state.isAuthenticated = false;
       });
   },

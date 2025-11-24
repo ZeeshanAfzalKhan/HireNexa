@@ -67,6 +67,13 @@ const SignupRecruitor = () => {
   }, [dispatch]);
 
   const handleOAuthSignup = (provider) => {
+    if (provider === 'linkedin') {
+      toast.error('LinkedIn authentication is currently in progress', {
+        duration: 4000,
+        icon: '⚠️',
+      });
+      return;
+    }
     const role = 'recruitor';
     window.location.href = `${API_BASE_URL}/auth/${provider}?role=${role}`;
   };
