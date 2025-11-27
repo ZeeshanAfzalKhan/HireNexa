@@ -73,7 +73,6 @@ export const applyJob = async (req, res) => {
 
     // Handle resume
     let resumeData = {};
-    console.log(resumeFile);
     if (resumeFile) {
       if (!resumeFile.mimetype.startsWith("application/pdf")) {
         return res.status(400).json({

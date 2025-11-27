@@ -253,8 +253,6 @@ export const oauthCallback = async (req, res) => {
   try {
     const user = req.user?.user || req.user;
 
-    console.log("OAuth user:", user);
-
     if (!user) {
       return res.status(400).json({
         success: false,

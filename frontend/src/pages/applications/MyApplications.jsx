@@ -21,13 +21,6 @@ const MyApplications = () => {
     dispatch(getAppliedJobs({ page: newPage, limit: 10 }));
   };
 
-  useEffect(() => {
-    if (applications.length > 0) {
-      console.log('Applications data:', applications);
-      console.log('First application resume:', applications[0]?.resume);
-    }
-  }, [applications]);
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-slate-800 flex items-center justify-center">

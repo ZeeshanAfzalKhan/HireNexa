@@ -180,7 +180,6 @@ export const updateProfile = async (req, res) => {
       });
     } else if (updates.profile.skills) {
       const skills = updates.profile.skills;
-      console.log(skills);
       if (!Array.isArray(skills)) {
         return res.status(400).json({
           success: false,

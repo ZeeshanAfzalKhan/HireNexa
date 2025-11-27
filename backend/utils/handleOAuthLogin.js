@@ -6,8 +6,6 @@ import User from "../models/user.model.js";
  */
 export const handleOAuthLogin = async ({ provider, profile, roleFromRequest }) => {
   try {
-    console.log("OAuth Profile:", JSON.stringify(profile, null, 2));
-    console.log("Role from request:", roleFromRequest);
 
     const email = (profile.emails?.[0]?.value || profile._json?.email)?.toLowerCase();
     if (!email) {

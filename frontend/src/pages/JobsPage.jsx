@@ -49,7 +49,6 @@ const JobsPage = () => {
     if (filters.minExperience && filters.minExperience !== '') params.minExperience = parseInt(filters.minExperience);
     if (filters.maxExperience && filters.maxExperience !== '') params.maxExperience = parseInt(filters.maxExperience);
     
-    console.log('Searching with params:', params);
     dispatch(fetchAllJobs(params));
   };
 
