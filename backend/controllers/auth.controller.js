@@ -294,10 +294,17 @@ export const oauthCallback = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    return res.status(200).clearCookie("token").json({
-      message: "Logged out successfully.",
-      success: true,
-    });
+    return res
+      .status(200)
+      .clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .json({
+        message: "Logged out successfully.",
+        success: true,
+      });
   } catch (err) {
     res.status(500).json({
       success: false,
