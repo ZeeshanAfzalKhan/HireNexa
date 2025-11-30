@@ -34,11 +34,11 @@ import {
 
 const TOAST_CONFIG = {
   error: {
-    duration: 4000,
+    duration: 2000,
     icon: '❌',
   },
   success: {
-    duration: 3000,
+    duration: 2000,
     icon: '✅',
   },
 };
