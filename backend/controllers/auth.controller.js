@@ -98,7 +98,7 @@ export const signup = async (req, res) => {
     }
 
     const options = {
-      httpsOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "none",
     };
@@ -192,7 +192,7 @@ export const login = async (req, res) => {
     );
 
     const options = {
-      httpsOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "none",
     };
