@@ -100,6 +100,7 @@ export const signup = async (req, res) => {
     const options = {
       httpsOnly: true,
       secure: true,
+      sameSite: "none",
     };
 
     const token = createdUser.generateAuthToken();
@@ -193,6 +194,7 @@ export const login = async (req, res) => {
     const options = {
       httpsOnly: true,
       secure: true,
+      sameSite: "none",
     };
 
     const token = user.generateAuthToken();
@@ -269,6 +271,7 @@ export const oauthCallback = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
+      sameSite: "none",
     };
 
     res.cookie("token", token, options);
