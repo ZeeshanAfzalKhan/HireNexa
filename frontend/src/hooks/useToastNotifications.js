@@ -38,7 +38,7 @@ const TOAST_CONFIG = {
     icon: '❌',
   },
   success: {
-    duration: 2000,
+    duration: 1500,
     icon: '✅',
   },
 };
