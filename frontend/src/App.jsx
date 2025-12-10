@@ -84,22 +84,21 @@ const Layout = () => {
 };
 
 // Router configuration
+// Router configuration
 const router = createBrowserRouter([
   {
-    path: "/",
     element: <Layout />,
     children: [
       {
-        index: true,
+        path: "/",
         element: (
           <PublicOnlyRoute>
             <HomePage />
           </PublicOnlyRoute>
         ),
       },
-
       {
-        path: "login/student",
+        path: "/login/student",
         element: (
           <PublicOnlyRoute>
             <LoginStudent />
@@ -107,7 +106,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "login/recruitor",
+        path: "/login/recruitor",
         element: (
           <PublicOnlyRoute>
             <LoginRecruitor />
@@ -115,7 +114,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "signup/student",
+        path: "/signup/student",
         element: (
           <PublicOnlyRoute>
             <SignupStudent />
@@ -123,13 +122,15 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "signup/recruitor",
+        path: "/signup/recruitor",
         element: (
           <PublicOnlyRoute>
             <SignupRecruitor />
           </PublicOnlyRoute>
         ),
       },
+
+      // Protected area
       {
         element: (
           <ProtectedRoute>
@@ -137,85 +138,62 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         children: [
-          {
-            path: "candidate-dashboard",
-            element: (
+          { path: "/candidate-dashboard", element: (
               <RoleProtectedRoute allowedRoles={["student"]}>
                 <CandidateDashboard />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "recruitor-dashboard",
-            element: (
+          { path: "/recruitor-dashboard", element: (
               <RoleProtectedRoute allowedRoles={["recruitor"]}>
                 <RecruiterDashboard />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "candidate-profile",
-            element: (
+          { path: "/candidate-profile", element: (
               <RoleProtectedRoute allowedRoles={["student"]}>
                 <CandidateProfile />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "company-profile",
-            element: (
+          { path: "/company-profile", element: (
               <RoleProtectedRoute allowedRoles={["recruitor"]}>
                 <CompanyProfile />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "post-job",
-            element: (
+          { path: "/post-job", element: (
               <RoleProtectedRoute allowedRoles={["recruitor"]}>
                 <PostJob />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "settings",
-            element: <Settings />,
-          },
-          {
-            path: "my-applications",
-            element: (
+          { path: "/settings", element: <Settings /> },
+          { path: "/my-applications", element: (
               <RoleProtectedRoute allowedRoles={["student"]}>
                 <MyApplications />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "apply/:jobId",
-            element: (
+          { path: "/apply/:jobId", element: (
               <RoleProtectedRoute allowedRoles={["student"]}>
                 <ApplyJob />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "my-posted-jobs",
-            element: (
+          { path: "/my-posted-jobs", element: (
               <RoleProtectedRoute allowedRoles={["recruitor"]}>
                 <MyPostedJobs />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "applications/:jobId",
-            element: (
+          { path: "/applications/:jobId", element: (
               <RoleProtectedRoute allowedRoles={["recruitor"]}>
                 <ApplicationsForJob />
               </RoleProtectedRoute>
             ),
           },
-          {
-            path: "update-job/:id",
-            element: (
+          { path: "/update-job/:id", element: (
               <RoleProtectedRoute allowedRoles={["recruitor"]}>
                 <UpdateJob />
               </RoleProtectedRoute>
@@ -223,8 +201,10 @@ const router = createBrowserRouter([
           },
         ],
       },
+
+      // Public pages
       {
-        path: "about",
+        path: "/about",
         element: (
           <PublicOnlyRoute>
             <AboutPage />
@@ -232,7 +212,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "contact",
+        path: "/contact",
         element: (
           <PublicOnlyRoute>
             <ContactPage />
@@ -240,36 +220,32 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "features",
+        path: "/features",
         element: (
           <PublicOnlyRoute>
             <FeaturesPage />
           </PublicOnlyRoute>
         ),
       },
+      { path: "/jobs", element: <JobsPage /> },
+      { path: "/jobs/:id", element: <JobDetailsPage /> },
+      { path: "/forbidden", element: <Forbidden /> },
+
+      // 🔴 OAuth callback (this is the important one)
       {
-        path: "jobs",
-        element: <JobsPage />,
-      },
-      {
-        path: "jobs/:id",
-        element: <JobDetailsPage />,
-      },
-      {
-        path: "forbidden",
-        element: <Forbidden />,
-      },
-      {
-        path: "oauth/callback",
+        path: "/oauth/callback",
         element: <OAuthCallbackPage />,
+      },
+
+      // Catch-all 404 inside the same tree
+      {
+        path: "*",
+        element: <Error404 />,
       },
     ],
   },
-  {
-    path: "*",
-    element: <Error404 />,
-  },
 ]);
+
 
 function App() {
   return (
