@@ -260,7 +260,7 @@ const router = createBrowserRouter([
         element: <Forbidden />,
       },
       {
-        path: "/oauth/callback",
+        path: "oauth/callback",
         element: <OAuthCallbackPage />,
       },
     ],
