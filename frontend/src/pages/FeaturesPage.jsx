@@ -5,47 +5,40 @@ const FeaturesPage = () => {
   const features = [
     {
       title: "Smart Job Matching",
-      description: "Our AI-powered algorithm analyzes your skills, experience, and preferences to match you with the most relevant job opportunities.",
+      description: "Advanced search and filtering system to match you with relevant job opportunities based on your skills and preferences.",
       icon: Lightbulb,
-      benefits: ["AI-powered matching", "Skill-based recommendations", "Personalized job alerts"]
+      benefits: ["Skill-based search", "Location filters", "Salary range filters"]
     },
     {
       title: "Advanced Search & Filters",
       description: "Find exactly what you're looking for with our comprehensive search and filtering system.",
       icon: Search,
-      benefits: ["Location-based search", "Salary range filters", "Company size options"]
+      benefits: ["Location-based search", "Salary range filters", "Experience level filters"]
     },
     {
-      title: "One-Click Applications",
-      description: "Apply to multiple jobs with a single click. Save time and increase your chances of landing interviews.",
+      title: "Easy Applications",
+      description: "Apply to jobs quickly with your saved profile and resume. Track all your applications in one place.",
       icon: Zap,
-      benefits: ["Bulk applications", "Saved applications", "Application tracking"]
+      benefits: ["Quick apply", "Saved resume", "Application tracking"]
     },
     {
-      title: "Company Insights",
-      description: "Get detailed information about companies, their culture, benefits, and employee reviews.",
+      title: "Company Profiles",
+      description: "View detailed information about companies before applying to their job postings.",
       icon: Building2,
-      benefits: ["Company profiles", "Culture insights", "Employee reviews"]
+      benefits: ["Company details", "Job listings", "Contact information"]
     },
     {
-      title: "Resume Builder",
-      description: "Create professional resumes with our built-in resume builder and templates.",
+      title: "Profile Management",
+      description: "Create and manage your professional profile with resume upload and skills showcase.",
       icon: FileText,
-      benefits: ["Professional templates", "ATS optimization", "Multiple formats"]
+      benefits: ["Resume upload", "Skills management", "Social links"]
     },
     {
-      title: "Interview Preparation",
-      description: "Prepare for interviews with our comprehensive interview guides and practice questions.",
+      title: "Application Management",
+      description: "Track your job applications and their status in real-time from your dashboard.",
       icon: MessageCircle,
-      benefits: ["Interview guides", "Practice questions", "Industry-specific tips"]
+      benefits: ["Status tracking", "Application history", "Real-time updates"]
     }
-  ];
-
-  const stats = [
-    { number: "95%", label: "Success Rate" },
-    { number: "50K+", label: "Active Users" },
-    { number: "10K+", label: "Job Listings" },
-    { number: "5K+", label: "Companies" }
   ];
 
   return (
@@ -105,32 +98,7 @@ const FeaturesPage = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-12">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Trusted by Thousands
-              </h2>
-              <p className="text-xl text-gray-600 dark:text-gray-400">
-                Join our growing community of successful professionals
-              </p>
-            </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl font-bold text-[#34aeeb] mb-2">
-                    {stat.number}
-                  </div>
-                  <div className="text-gray-600 dark:text-gray-400 font-medium">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">

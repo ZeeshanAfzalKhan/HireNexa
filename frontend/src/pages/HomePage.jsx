@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Users, Zap, TrendingUp, Building2, MapPin } from 'lucide-react';
+import { Search, Users, Zap, Building2 } from 'lucide-react';
 
 const LandingPage = () => {
   return (
@@ -85,46 +85,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-r from-[#34aeeb] to-[#279ed8]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Trusted by Thousands</h2>
-            <p className="text-xl text-blue-100">Join our growing community of successful job seekers and employers</p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <div className="flex items-center justify-center w-12 h-12 bg-white/20 rounded-xl mx-auto mb-4">
-                <TrendingUp className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">10K+</div>
-              <div className="text-blue-100">Active Jobs</div>
-            </div>
-            <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <div className="flex items-center justify-center w-12 h-12 bg-white/20 rounded-xl mx-auto mb-4">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">5K+</div>
-              <div className="text-blue-100">Companies</div>
-            </div>
-            <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <div className="flex items-center justify-center w-12 h-12 bg-white/20 rounded-xl mx-auto mb-4">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">50K+</div>
-              <div className="text-blue-100">Job Seekers</div>
-            </div>
-            <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <div className="flex items-center justify-center w-12 h-12 bg-white/20 rounded-xl mx-auto mb-4">
-                <Zap className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">95%</div>
-              <div className="text-blue-100">Success Rate</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 text-center">

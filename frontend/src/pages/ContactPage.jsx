@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, MessageCircle, Send, Clock } from 'lucide-react';
+import { Mail, MessageCircle, Send } from 'lucide-react';
 
 const ContactPage = () => {
   return (
@@ -115,10 +115,10 @@ const ContactPage = () => {
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
               <div className="bg-[#34aeeb] px-8 py-6">
                 <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <Phone className="w-6 h-6" />
+                  <Mail className="w-6 h-6" />
                   Contact Information
                 </h3>
-                <p className="text-blue-100 mt-2">Multiple ways to reach our team</p>
+                <p className="text-blue-100 mt-2">How to reach our team</p>
               </div>
               
               <div className="p-8 space-y-6">
@@ -128,58 +128,40 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Email Us</h4>
-                    <p className="text-gray-600 dark:text-gray-400">support@hirenexa.com</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-500">We usually reply within 24 hours.</p>
+                    <p className="text-gray-600 dark:text-gray-400">For support and inquiries, please use the contact form.</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500">We'll get back to you as soon as possible.</p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-[#34aeeb] rounded-xl flex items-center justify-center shrink-0">
-                    <Phone className="w-6 h-6 text-white" />
+                    <MessageCircle className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Call Us</h4>
-                    <p className="text-gray-600 dark:text-gray-400">(555) 123-4567</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-500 flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      Mon–Fri, 9AM–6PM EST
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-[#34aeeb] rounded-xl flex items-center justify-center shrink-0">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Visit Us</h4>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      123 Tech Street<br />
-                      San Francisco, CA 94105<br />
-                      United States
-                    </p>
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Submit a Request</h4>
+                    <p className="text-gray-600 dark:text-gray-400">Fill out the contact form with your inquiry</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500">We review all submissions carefully</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Live Chat Card */}
+            {/* Help Card */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
               <div className="bg-gradient-to-r from-green-500 to-green-600 px-8 py-6">
                 <h3 className="text-2xl font-bold text-white flex items-center gap-3">
                   <MessageCircle className="w-6 h-6" />
-                  Need Immediate Help?
+                  Need Help?
                 </h3>
               </div>
               
               <div className="p-8">
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Our support team is available 24/7 to help you with any questions or issues you might have.
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Have questions about using HireNexa? Check out our documentation or submit a request through the contact form.
                 </p>
-                <button className="flex items-center gap-2 bg-[#34aeeb] hover:bg-[#279ed8] text-white font-semibold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] cursor-pointer">
-                  <MessageCircle className="w-5 h-5" />
-                  Live Chat
-                </button>
+                <p className="text-sm text-gray-500 dark:text-gray-500">
+                  We're here to help you make the most of our platform.
+                </p>
               </div>
             </div>
           </div>
