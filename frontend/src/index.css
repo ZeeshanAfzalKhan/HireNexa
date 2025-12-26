@@ -24,7 +24,6 @@
     color 0.2s ease-in-out;
 }
 
-/* Responsive content margin for fixed Sidebar */
 :root {
   --sidebar-width: 0; /* default when Sidebar is not mounted */
 }
